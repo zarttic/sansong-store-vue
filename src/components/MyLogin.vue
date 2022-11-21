@@ -1,9 +1,5 @@
 <!--
  * @Description: 登录组件
- * @Author: hai-27
- * @Date: 2020-02-19 20:55:17
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-01 15:34:08
  -->
 <template>
   <div id="myLogin">
@@ -21,12 +17,12 @@
           ></el-input>
         </el-form-item>
 <!--        验证码-->
-        <el-form-item style="display: flex">
+        <el-form-item >
           <el-image
-              style="width: 60px; height: 40px; "
+              style="position: absolute; width: 60px; height: 40px; "
               :src="url" >
           </el-image>
-          <el-input prefix-icon="el-icon-view" type="text" v-model="LoginUser.verifyCode" style="height: 40px; width: 190px;">
+          <el-input prefix-icon="el-icon-lock" type="text" v-model="LoginUser.verifyCode" style="margin-left: 60px; height: 40px; width: 190px;">
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -109,7 +105,7 @@ export default {
         //如果通过校验开始登录
         if (valid) {
           this.$axios
-            .post("http://localhost:9001/sysController/login", {
+            .post("/sysController/login", {
               account: this.LoginUser.name,
               password: this.LoginUser.pass,
               verifyCode: this.LoginUser.verifyCode

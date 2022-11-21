@@ -1,15 +1,11 @@
 /*
  * @Description: 购物车状态模块
- * @Author: hai-27
- * @Date: 2020-02-21 18:40:41
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-07 20:38:55
  */
 export default {
   state: {
     shoppingCart: []
     // shoppingCart结构
-    /* 
+    /*
     shoppingCart = {
       id: "", // 购物车id
       productID: "", // 商品id
