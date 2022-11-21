@@ -61,7 +61,7 @@ export default {
           })
           .then(res => {
             // “001”代表用户名不存在，可以注册
-            if (res.data.code == "001") {
+            if (res.data.code === "001") {
               this.$refs.ruleForm.validateField("checkPass");
               return callback();
             } else {
@@ -97,7 +97,7 @@ export default {
         return callback(new Error("请输入确认密码"));
       }
       // 校验是否以密码一致
-      if (this.RegisterUser.pass != "" && value === this.RegisterUser.pass) {
+      if (this.RegisterUser.pass !== "" && value === this.RegisterUser.pass) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {

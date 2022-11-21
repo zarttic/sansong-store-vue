@@ -4,8 +4,8 @@
 <template>
   <div class="home" id="home" name="home">
     <!-- 轮播图 -->
-    <div class="block">
-      <el-carousel height="460px">
+    <div class="block" >
+      <el-carousel height="460px" type="card">
         <el-carousel-item v-for="item in carousel" :key="item.carousel_id">
           <img style="height:460px;" :src="$target + item.imgPath" :alt="item.describes" />
         </el-carousel-item>
@@ -116,7 +116,7 @@ export default {
     applianceActive: function(val) {
       // 页面初始化的时候把applianceHotList(热门家电商品列表)直接赋值给applianceList(家电商品列表)
       // 所以在切换商品列表时判断applianceHotList是否为空,为空则是第一次切换,把applianceList赋值给applianceHotList
-      if (this.applianceHotList == "") {
+      if (this.applianceHotList === "") {
         this.applianceHotList = this.applianceList;
       }
       if (val == 1) {
