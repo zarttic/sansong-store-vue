@@ -95,7 +95,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setAccount", "setShowLogin","setId"]),
+    ...mapActions(["setAccount", "setShowLogin","setUserId"]),
     Login() {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
@@ -122,12 +122,12 @@ export default {
                       localStorage.setItem("account",account1);
                       // 登录信息存到vuex
                       let id1 = JSON.parse(res.data.data.userId);
-                      localStorage.setItem("id",id1);
+                      localStorage.setItem("userId",id1);
                     })
 
                 // 弹出通知框提示登录成功信息
                 this.notifySucceed(res.data.msg);
-                // location.reload();
+                location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
