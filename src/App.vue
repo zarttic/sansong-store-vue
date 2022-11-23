@@ -133,6 +133,7 @@ export default {
     if (localStorage.getItem("account")) {
       // 如果已经登录，设置vuex登录状态
       this.setAccount(JSON.parse(localStorage.getItem("account")));
+      this.setId(JSON.parse(localStorage.getItem("id")));
     }
   },
   computed: {
@@ -141,6 +142,8 @@ export default {
   watch: {
     // 获取vuex的登录状态
     getAccount: function(val) {
+      val.user_id
+      console.log("getAccount +val\n:" + val);
       if (val === "") {
         // 用户没有登录
         console.log("用户没有登录")
@@ -148,11 +151,12 @@ export default {
       } else {
         // 用户已经登录,获取该用户的购物车信息
         this.$axios
-          .post("/api/user/shoppingCart/getShoppingCart", {
-            user_id: val.user_id
+          .get(this.$lc + "shopcarController/getshopcar", {
+            id: val.user_id
           })
           .then(res => {
-            if (res.data.code === "001") {
+            console.log("getAccount\n:"+res)
+            if (res.data.data.code === 200) {
               // 001 为成功, 更新vuex购物车状态
               this.setShoppingCart(res.data.shoppingCartData);
             } else {
@@ -167,7 +171,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setAccount", "setShowLogin", "setShoppingCart"]),
+    ...mapActions(["setAccount", "setShowLogin", "setShoppingCart","setId"]),
     login() {
       console.log(this.$store.getters.getShowLogin);
       // 点击登录按钮, 通过更改vuex的showLogin值显示登录组件
@@ -178,8 +182,10 @@ export default {
       this.visible = false;
       // 清空本地登录信息
       localStorage.setItem("account", "");
+      localStorage.setItem("id", "");
       // 清空vuex登录信息
       this.setAccount("");
+      this.setId("");
       this.$axios
           .get('http://10.131.133.134:9001/sysController/exit')
       this.notifySucceed("成功退出登录");

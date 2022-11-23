@@ -71,7 +71,7 @@ export default {
         password: "",
         verifyCode: "",
       },
-      url: "http://10.131.133.134:9001/sysController/getVerifyCodeImage",
+      url: this.$lc+"sysController/getVerifyCodeImage",
 
 
 
@@ -95,40 +95,39 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setAccount", "setShowLogin"]),
+    ...mapActions(["setAccount", "setShowLogin","setId"]),
     Login() {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
         if (valid) {
           this.$axios
-            .post("http://10.131.133.134:9001/sysController/login", {
+            .post(this.$lc +"sysController/login", {
               account: this.LoginAccount.account,
               password: this.LoginAccount.password,
               verifyCode: this.LoginAccount.verifyCode
             })
             .then(res => {
-
               // “001”代表登录成功，其他的均为失败
-              if (res.data.code == "200") {
+              if (res.data.code === 200) {
                 // 隐藏登录组件
                 this.isLogin = false;
-
                 //请求一个info
                 this.$axios
-                    .get("http://10.131.133.134:9001/sysController/info",)
+                    .get(this.$lc +"sysController/info",)
                     .then(function (res){
                       // 登录信息存到本地
-                      console.log(res.data.data.account);
-                      let account = JSON.stringify(res.data.data.account);
-                      localStorage.setItem("account",account);
+                      let account1 = JSON.stringify(res.data.data.account);
+                      console.log(account1);
+                      localStorage.setItem("account",account1);
                       // 登录信息存到vuex
-                      this.setAccount(account);
+                      let id1 = JSON.parse(res.data.data.userId);
+                      localStorage.setItem("id",id1);
                     })
 
                 // 弹出通知框提示登录成功信息
                 this.notifySucceed(res.data.msg);
-                location.reload();
+                // location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();

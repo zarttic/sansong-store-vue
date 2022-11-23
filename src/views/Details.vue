@@ -33,7 +33,7 @@
             <img style="height:560px;" :src="$target + item.product_picture" :alt="item.intro" />
           </el-carousel-item>
         </el-carousel>
-        <div v-if="productPicture.length==1">
+        <div v-if="productPicture.length===1">
           <img
             style="height:560px;"
             :src="$target + productPicture[0].product_picture"
@@ -51,7 +51,7 @@
         <div class="price">
           <span>{{productDetails.product_selling_price}}元</span>
           <span
-            v-show="productDetails.product_price != productDetails.product_selling_price"
+            v-show="productDetails.product_price !== productDetails.product_selling_price"
             class="del"
           >{{productDetails.product_price}}元</span>
         </div>
@@ -60,7 +60,7 @@
           <span class="pro-price">
             <span>{{productDetails.product_selling_price}}元</span>
             <span
-              v-show="productDetails.product_price != productDetails.product_selling_price"
+              v-show="productDetails.product_price !== productDetails.product_selling_price"
               class="pro-del"
             >{{productDetails.product_price}}元</span>
           </span>
@@ -149,13 +149,13 @@ export default {
     // 加入购物车
     addShoppingCart() {
       // 判断是否登录,没有登录则显示登录组件
-      if (!this.$store.getters.getUser) {
+      if (!this.$store.getters.getAccount) {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
       this.$axios
-        .post("/api/user/shoppingCart/addShoppingCart", {
-          user_id: this.$store.getters.getUser.user_id,
+        .post(this.$lc + "ordersController/addShopCar", {
+          user_id: this.$store.getters.getId,
           product_id: this.productID
         })
         .then(res => {
@@ -185,13 +185,13 @@ export default {
     },
     addCollect() {
       // 判断是否登录,没有登录则显示登录组件
-      if (!this.$store.getters.getUser) {
+      if (!this.$store.getters.getAccount) {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
       this.$axios
         .post("/api/user/collect/addCollect", {
-          user_id: this.$store.getters.getUser.user_id,
+          user_id: this.$store.getters.getAccount.user_id,
           product_id: this.productID
         })
         .then(res => {

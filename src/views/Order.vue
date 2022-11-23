@@ -91,7 +91,7 @@ export default {
     // 获取订单数据
     this.$axios
       .post("/api/user/order/getOrder", {
-        user_id: this.$store.getters.getUser.user_id
+        user_id: this.$store.getters.getAccount.user_id
       })
       .then(res => {
         if (res.data.code === "001") {
