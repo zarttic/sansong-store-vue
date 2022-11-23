@@ -140,7 +140,7 @@ export default {
     Register() {
       console.log(this.RegisterUser.account+' '+this.RegisterUser.password);
       this.$axios
-          .post("http://10.132.207.67:9001/sysController/register", {
+          .post("http://10.131.133.134:9001/sysController/register", {
             account: this.RegisterUser.account,
             password: this.RegisterUser.password,
 
