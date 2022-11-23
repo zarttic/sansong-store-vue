@@ -1,30 +1,27 @@
-<!--
- * @Description: 登录组件
- -->
 <template>
   <div id="myLogin">
     <el-dialog title="登录" width="300px" center :visible.sync="isLogin">
-      <el-form :model="LoginUser" :rules="rules" status-icon ref="ruleForm" class="demo-ruleForm">
-        <el-form-item prop="name">
-          <el-input prefix-icon="el-icon-user-solid" placeholder="请输入账号" v-model="LoginUser.name"></el-input>
+      <el-form :model="LoginAccount" :rules="rules" status-icon ref="ruleForm" class="demo-ruleForm">
+        <el-form-item prop="account">
+          <el-input prefix-icon="el-icon-user-solid" placeholder="请输入账号" v-model="LoginAccount.account"></el-input>
         </el-form-item>
-        <el-form-item prop="pass">
+        <el-form-item prop="password">
           <el-input
             prefix-icon="el-icon-view"
             type="password"
             placeholder="请输入密码"
-            v-model="LoginUser.pass"
+            v-model="LoginAccount.password"
           ></el-input>
         </el-form-item>
-<!--        验证码-->
-<!--        <el-form-item >-->
-<!--          <el-image-->
-<!--              style="position: absolute; width: 60px; height: 40px; "-->
-<!--              :src="url" >-->
-<!--          </el-image>-->
-<!--          <el-input prefix-icon="el-icon-lock" type="text" v-model="LoginUser.verifyCode" style="margin-left: 60px; height: 40px; width: 190px;">-->
-<!--          </el-input>-->
-<!--        </el-form-item>-->
+        验证码
+        <el-form-item >
+          <el-image
+              style="position: absolute; width: 60px; height: 40px; "
+              :src="url" >
+          </el-image>
+          <el-input prefix-icon="el-icon-lock" type="text" v-model="LoginAccount.verifyCode" style="margin-left: 60px; height: 40px; width: 190px;">
+          </el-input>
+        </el-form-item>
         <el-form-item>
           <el-button size="medium" type="primary" @click="Login" style="width:100%;">登录</el-button>
         </el-form-item>
@@ -44,7 +41,7 @@ export default {
         return callback(new Error("请输入用户名"));
       }
       // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
-      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
+      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{1,15}$/;
       if (userNameRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
@@ -58,7 +55,7 @@ export default {
         return callback(new Error("请输入密码"));
       }
       // 密码以字母开头,长度在6-18之间,允许字母数字和下划线
-      const passwordRule = /^[a-zA-Z]\w{4,17}$/;
+      const passwordRule = /^[a-zA-Z]\w{1,17}$/;
       if (passwordRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
@@ -69,19 +66,19 @@ export default {
       }
     };
     return {
-      LoginUser: {
-        name: "",
-        pass: "",
-        // verifyCode: "",
+      LoginAccount: {
+        account: "",
+        password: "",
+        verifyCode: "",
       },
-      // url: "http://localhost:9001/sysController/getVerifyCodeImage",
+      url: "http://10.132.207.67:9001/sysController/getVerifyCodeImage",
 
 
 
       // 用户信息校验规则,validator(校验方法),trigger(触发方式),blur为在组件 Input 失去焦点时触发
       rules: {
-        name: [{ validator: validateName, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: "blur" }]
+        account: [{ validator: validateName, trigger: "blur" }],
+        password: [{ validator: validatePass, trigger: "blur" }]
       }
     };
   },
@@ -98,30 +95,40 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setUser", "setShowLogin"]),
+    ...mapActions(["setAccount", "setShowLogin"]),
     Login() {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
         if (valid) {
           this.$axios
-            .post("/api/users/login", {
-              userName: this.LoginUser.name,
-              password: this.LoginUser.pass,
-              verifyCode: this.LoginUser.verifyCode
+            .post("http://10.132.207.67:9001/sysController/login", {
+              account: this.LoginAccount.account,
+              password: this.LoginAccount.password,
+              verifyCode: this.LoginAccount.verifyCode
             })
             .then(res => {
+
               // “001”代表登录成功，其他的均为失败
-              if (res.data.code === "001") {
+              if (res.data.code == "200") {
                 // 隐藏登录组件
                 this.isLogin = false;
-                // 登录信息存到本地
-                let user = JSON.stringify(res.data.user);
-                localStorage.setItem("user", user);
-                // 登录信息存到vuex
-                this.setUser(res.data.user);
+
+                //请求一个info
+                this.$axios
+                    .get("http://10.132.207.67:9001/sysController/info",)
+                    .then(function (res){
+                      // 登录信息存到本地
+                      console.log(res.data.data.account);
+                      let account = JSON.stringify(res.data.data.account);
+                      localStorage.setItem("account",account);
+                      // 登录信息存到vuex
+                      this.setAccount(account);
+                    })
+
                 // 弹出通知框提示登录成功信息
                 this.notifySucceed(res.data.msg);
+                location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
