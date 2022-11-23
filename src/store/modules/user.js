@@ -4,7 +4,8 @@
 export default {
   state: {
     account: "", // 登录的用户
-    showLogin: false // 用于控制是否显示登录组件
+    showLogin: false, // 用于控制是否显示登录组件
+    id: ""
   },
   getters: {
     getAccount (state) {
@@ -12,6 +13,9 @@ export default {
     },
     getShowLogin (state) {
       return state.showLogin
+    },
+    getId (state) {
+      return state.id
     }
   },
   mutations: {
@@ -20,6 +24,9 @@ export default {
     },
     setShowLogin (state, data) {
       state.showLogin = data;
+    },
+    setId (state,data) {
+      state.id = data;
     }
   },
   actions: {
@@ -28,6 +35,9 @@ export default {
     },
     setShowLogin ({ commit }, data) {
       commit('setShowLogin', data);
+    },
+    setId ({ commit }, data) {
+      commit('setId', data);
     }
   }
 }
