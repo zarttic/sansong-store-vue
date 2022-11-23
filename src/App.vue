@@ -133,31 +133,36 @@ export default {
     if (localStorage.getItem("account")) {
       // 如果已经登录，设置vuex登录状态
       this.setAccount(JSON.parse(localStorage.getItem("account")));
-      this.setId(JSON.parse(localStorage.getItem("id")));
+      this.setUserId(JSON.parse(localStorage.getItem("userId")));
     }
   },
   computed: {
-    ...mapGetters(["getAccount", "getNum"])
+    ...mapGetters(["getAccount", "getNum","getUserId"])
   },
   watch: {
     // 获取vuex的登录状态
     getAccount: function(val) {
-      val.user_id
-      console.log("getAccount +val\n:" + val);
       if (val === "") {
         // 用户没有登录
         console.log("用户没有登录")
         this.setShoppingCart([]);
       } else {
         // 用户已经登录,获取该用户的购物车信息
+        console.log(localStorage.getItem("userId"))
         this.$axios
           .get(this.$lc + "shopcarController/getshopcar", {
-            id: val.user_id
+            'params':{
+              userId: localStorage.getItem("userId")
+            }
           })
           .then(res => {
-            console.log("getAccount\n:"+res)
-            if (res.data.data.code === 200) {
+            res.data.data.forEach(it =>{
+              console.log(it);
+            })
+
+            if (res.data.code === 200) {
               // 001 为成功, 更新vuex购物车状态
+              console.log("更新vuex购物车状态")
               this.setShoppingCart(res.data.shoppingCartData);
             } else {
               // 提示失败信息
@@ -171,7 +176,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setAccount", "setShowLogin", "setShoppingCart","setId"]),
+    ...mapActions(["setAccount", "setShowLogin", "setShoppingCart","setUserId"]),
     login() {
       console.log(this.$store.getters.getShowLogin);
       // 点击登录按钮, 通过更改vuex的showLogin值显示登录组件
@@ -185,7 +190,7 @@ export default {
       localStorage.setItem("id", "");
       // 清空vuex登录信息
       this.setAccount("");
-      this.setId("");
+      this.setUserId("");
       this.$axios
           .get('http://10.132.207.67:9001/sysController/exit')
       this.notifySucceed("成功退出登录");

@@ -155,8 +155,9 @@ export default {
       }
       this.$axios
         .post(this.$lc + "ordersController/addShopCar", {
-          user_id: this.$store.getters.getId,
-          product_id: this.productID
+          userId: localStorage.getItem("id"),
+          productId: this.productID,
+
         })
         .then(res => {
           switch (res.data.code) {
