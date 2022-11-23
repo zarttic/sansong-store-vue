@@ -71,7 +71,7 @@ export default {
         password: "",
         verifyCode: "",
       },
-      url: "http://10.132.207.67:9001/sysController/getVerifyCodeImage",
+      url: "http://10.131.133.134:9001/sysController/getVerifyCodeImage",
 
 
 
@@ -102,7 +102,7 @@ export default {
         //如果通过校验开始登录
         if (valid) {
           this.$axios
-            .post("http://10.132.207.67:9001/sysController/login", {
+            .post("http://10.131.133.134:9001/sysController/login", {
               account: this.LoginAccount.account,
               password: this.LoginAccount.password,
               verifyCode: this.LoginAccount.verifyCode
@@ -116,7 +116,7 @@ export default {
 
                 //请求一个info
                 this.$axios
-                    .get("http://10.132.207.67:9001/sysController/info",)
+                    .get("http://10.131.133.134:9001/sysController/info",)
                     .then(function (res){
                       // 登录信息存到本地
                       console.log(res.data.data.account);
