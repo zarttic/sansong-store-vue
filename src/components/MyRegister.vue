@@ -11,19 +11,19 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item prop="name">
+        <el-form-item prop="account">
           <el-input
             prefix-icon="el-icon-user-solid"
             placeholder="请输入账号"
-            v-model="RegisterUser.name"
+            v-model="RegisterUser.account"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="pass">
+        <el-form-item prop="password">
           <el-input
             prefix-icon="el-icon-view"
             type="password"
             placeholder="请输入密码"
-            v-model="RegisterUser.pass"
+            v-model="RegisterUser.password"
           ></el-input>
         </el-form-item>
         <el-form-item prop="confirmPass">
@@ -51,37 +51,39 @@ export default {
       if (!value) {
         return callback(new Error("请输入用户名"));
       }
-      // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
-      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
-      if (userNameRule.test(value)) {
-        //判断数据库中是否已经存在该用户名
-        this.$axios
-          .post("/api/users/findUserName", {
-            userName: this.RegisterUser.name
-          })
-          .then(res => {
-            // “001”代表用户名不存在，可以注册
-            if (res.data.code === "001") {
-              this.$refs.ruleForm.validateField("checkPass");
-              return callback();
-            } else {
-              return callback(new Error(res.data.msg));
-            }
-          })
-          .catch(err => {
-            return Promise.reject(err);
-          });
-      } else {
-        return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
-      }
+      // 用户名以字母开头,长度在5-16之间,允许字母数字下划线  !后续修改校验长度
+      // const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{1,15}$/;
+
+        // this.$axios
+        //   .post("http://10.132.207.67:9001/sysController/register", {
+        //     account: this.RegisterUser.account,
+        //     password : this.RegisterUser.password,
+        //
+        //   })
+        //   .then(res => {
+        //     return callback(new Error(res.data.msg));
+        //     // “001”代表用户名不存在，可以注册
+        //     // if (res.data.code !== "201") {
+        //     //   this.$refs.ruleForm.validateField("checkPass");
+        //     //   return callback();
+        //     // } else {
+        //     //   return callback(new Error(res.data.msg));
+        //     // }
+        //   })
+        //   .catch(err => {
+        //     return Promise.reject(err);
+        //   });
+      // } else {
+      //   return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
+      // }
     };
     // 密码的校验方法
     let validatePass = (rule, value, callback) => {
       if (value === "") {
         return callback(new Error("请输入密码"));
       }
-      // 密码以字母开头,长度在6-18之间,允许字母数字和下划线
-      const passwordRule = /^[a-zA-Z]\w{5,17}$/;
+      // 密码以字母开头,长度在6-18之间,允许字母数字和下划线  !后续修改校验长度
+      const passwordRule = /^[a-zA-Z]\w{1,17}$/;
       if (passwordRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
@@ -97,7 +99,7 @@ export default {
         return callback(new Error("请输入确认密码"));
       }
       // 校验是否以密码一致
-      if (this.RegisterUser.pass !== "" && value === this.RegisterUser.pass) {
+      if (this.RegisterUser.password !== "" && value === this.RegisterUser.password) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {
@@ -107,14 +109,14 @@ export default {
     return {
       isRegister: false, // 控制注册组件是否显示
       RegisterUser: {
-        name: "",
-        pass: "",
+        account: "",
+        password: "",
         confirmPass: ""
       },
       // 用户信息校验规则,validator(校验方法),trigger(触发方式),blur为在组件 Input 失去焦点时触发
       rules: {
-        name: [{ validator: validateName, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: "blur" }],
+        account: [{ validator: validateName, trigger: "blur" }],
+        password: [{ validator: validatePass, trigger: "blur" }],
         confirmPass: [{ validator: validateConfirmPass, trigger: "blur" }]
       }
     };
@@ -136,34 +138,37 @@ export default {
   },
   methods: {
     Register() {
-      // 通过element自定义表单校验规则，校验用户输入的用户信息
-      this.$refs["ruleForm"].validate(valid => {
-        //如果通过校验开始注册
-        if (valid) {
-          this.$axios
-            .post("/api/users/register", {
-              userName: this.RegisterUser.name,
-              password: this.RegisterUser.pass
-            })
-            .then(res => {
-              // “001”代表注册成功，其他的均为失败
-              if (res.data.code === "001") {
-                // 隐藏注册组件
-                this.isRegister = false;
-                // 弹出通知框提示注册成功信息
-                this.notifySucceed(res.data.msg);
-              } else {
-                // 弹出通知框提示注册失败信息
-                this.notifyError(res.data.msg);
-              }
-            })
-            .catch(err => {
-              return Promise.reject(err);
-            });
-        } else {
-          return false;
-        }
-      });
+      this.$axios
+          .post("http://10.132.207.67:9001/sysController/register", {
+            account: this.RegisterUser.account,
+            password: this.RegisterUser.password
+          })
+          .then(res => {
+            console.log(res)
+            console.log(res.data.code)
+            // “001”代表注册成功，其他的均为失败
+            if (res.data.code === 200) {
+              // 隐藏注册组件
+              this.isRegister = false;
+              // 弹出通知框提示注册成功信息
+              this.notifySucceed(res.data.message);
+            } else {
+              // 弹出通知框提示注册失败信息
+              this.notifyError(res.data.message);
+            }
+          })
+          .catch(err => {
+            return Promise.reject(err);
+          });
+      // // 通过element自定义表单校验规则，校验用户输入的用户信息
+      // this.$refs["ruleForm"].validate(valid => {
+      //   //如果通过校验开始注册
+      //   if (valid) {
+      //
+      //   } else {
+      //     return false;
+      //   }
+      // });
     }
   }
 };

@@ -64,6 +64,11 @@ const routes = [
     meta: {
       requireAuth: true // 需要验证登录状态
     }
+  },
+  {
+    path: '/Userinfo',
+    name: 'Userinfo',
+    component: () => import('../views/Userinfo.vue'),
   }
 ]
 

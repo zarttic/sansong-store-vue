@@ -135,6 +135,7 @@ export default {
       // 所以在切换商品列表时判断accessoryHotList是否为空,为空则是第一次切换,把accessoryList赋值给accessoryHotList
       if (this.accessoryHotList == "") {
         this.accessoryHotList = this.accessoryList;
+
       }
       if (val == 1) {
         // 1为热门商品

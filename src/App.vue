@@ -8,21 +8,22 @@
       <div class="topbar">
         <div class="nav">
           <ul>
-            <li v-if="!this.$store.getters.getUser">
+            <li v-if="!this.$store.getters.getAccount">
               <el-button type="text" @click="login">登录</el-button>
               <span class="sep">|</span>
               <el-button type="text" @click="register = true">注册</el-button>
             </li>
             <li v-else>
-              欢迎
               <el-popover placement="top" width="180" v-model="visible">
                 <p>确定退出登录吗？</p>
                 <div style="text-align: right; margin: 10px 0 0">
                   <el-button size="mini" type="text" @click="visible = false">取消</el-button>
                   <el-button type="primary" size="mini" @click="logout">确定</el-button>
                 </div>
-                <el-button type="text" slot="reference">{{this.$store.getters.getUser.userName}}</el-button>
+                <el-button type="text" slot="reference">退出</el-button>
               </el-popover>
+              欢迎
+              <router-link to="/Userinfo">{{this.$store.getters.getAccount}}</router-link>
             </li>
             <li>
               <router-link to="/order">我的订单</router-link>
@@ -44,11 +45,11 @@
       <!-- 顶栏容器 -->
       <el-header>
         <el-menu
-          :default-active="activeIndex"
-          class="el-menu-demo"
-          mode="horizontal"
-          active-text-color="#409eff"
-          router
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            active-text-color="#409eff"
+            router
         >
           <div class="logo">
             <router-link to="/">
@@ -93,11 +94,6 @@
               </p>
             </div>
           </div>
-          <div class="github">
-            <a href="https://github.com/hai-27/vue-store" target="_blank">
-              <div class="github-but"></div>
-            </a>
-          </div>
           <div class="mod_help">
             <p>
               <router-link to="/">首页</router-link>
@@ -106,7 +102,7 @@
               <span>|</span>
               <router-link to="/about">关于我们</router-link>
             </p>
-            <p class="coty">商城版权所有 &copy; 2012-2021</p>
+            <p class="coty">商城版权所有 &copy; 2022-11</p>
           </div>
         </div>
       </el-footer>
@@ -120,6 +116,7 @@ import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 
 export default {
+  components: {},
   beforeUpdate() {
     this.activeIndex = this.$route.path;
   },
@@ -128,36 +125,25 @@ export default {
       activeIndex: "", // 头部导航栏选中的标签
       search: "", // 搜索条件
       register: false, // 是否显示注册组件
-      visible: false // 是否退出登录
+      visible: false, // 是否退出登录
     };
   },
   created() {
     // 获取浏览器localStorage，判断用户是否已经登录
-    if (localStorage.getItem("user")) {
+    if (localStorage.getItem("account")) {
       // 如果已经登录，设置vuex登录状态
-      this.setUser(JSON.parse(localStorage.getItem("user")));
+      this.setAccount(JSON.parse(localStorage.getItem("account")));
     }
-    /* window.setTimeout(() => {
-      this.$message({
-        duration: 0,
-        showClose: true,
-        message: `
-        <p>如果觉得这个项目还不错，</p>
-        <p style="padding:10px 0">您可以给项目源代码仓库点Star支持一下，谢谢！</p>
-        <p><a href="https://github.com/hai-27/vue-store" target="_blank">Github传送门</a></p>`,
-        dangerouslyUseHTMLString: true,
-        type: "success"
-      });
-    }, 1000 * 60); */
   },
   computed: {
-    ...mapGetters(["getUser", "getNum"])
+    ...mapGetters(["getAccount", "getNum"])
   },
   watch: {
     // 获取vuex的登录状态
-    getUser: function(val) {
+    getAccount: function(val) {
       if (val === "") {
         // 用户没有登录
+        console.log("用户没有登录")
         this.setShoppingCart([]);
       } else {
         // 用户已经登录,获取该用户的购物车信息
@@ -181,8 +167,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setUser", "setShowLogin", "setShoppingCart"]),
+    ...mapActions(["setAccount", "setShowLogin", "setShoppingCart"]),
     login() {
+      console.log(this.$store.getters.getShowLogin);
       // 点击登录按钮, 通过更改vuex的showLogin值显示登录组件
       this.setShowLogin(true);
     },
@@ -190,9 +177,11 @@ export default {
     logout() {
       this.visible = false;
       // 清空本地登录信息
-      localStorage.setItem("user", "");
+      localStorage.setItem("account", "");
       // 清空vuex登录信息
-      this.setUser("");
+      this.setAccount("");
+      this.$axios
+          .get('http://10.132.207.67:9001/sysController/exit')
       this.notifySucceed("成功退出登录");
     },
     // 接收注册子组件传过来的数据
@@ -201,7 +190,7 @@ export default {
     },
     // 点击搜索按钮
     searchClick() {
-      if (this.search != "") {
+      if (this.search !== "") {
         // 跳转到全部商品页面,并传递搜索条件
         this.$router.push({ path: "/goods", query: { search: this.search } });
         this.search = "";

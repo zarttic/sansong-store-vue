@@ -3,30 +3,31 @@
  */
 export default {
   state: {
-    user: "", // 登录的用户
+    account: "", // 登录的用户
     showLogin: false // 用于控制是否显示登录组件
   },
   getters: {
-    getUser (state) {
-      return state.user
+    getAccount (state) {
+      return state.account
     },
     getShowLogin (state) {
       return state.showLogin
     }
   },
   mutations: {
-    setUser (state, data) {
-      state.user = data;
+    setAccount (state, data) {
+      state.account = data;
     },
     setShowLogin (state, data) {
       state.showLogin = data;
     }
   },
   actions: {
-    setUser ({ commit }, data) {
-      commit('setUser', data);
+    setAccount ({ commit }, data) {
+      commit('setAccount', data);
     },
     setShowLogin ({ commit }, data) {
+      console.log(data+"111");
       commit('setShowLogin', data);
     }
   }
