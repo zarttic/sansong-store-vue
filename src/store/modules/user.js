@@ -27,7 +27,6 @@ export default {
       commit('setAccount', data);
     },
     setShowLogin ({ commit }, data) {
-      console.log(data+"111");
       commit('setShowLogin', data);
     }
   }

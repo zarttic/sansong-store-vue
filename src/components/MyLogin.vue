@@ -71,7 +71,7 @@ export default {
         password: "",
         verifyCode: "",
       },
-      url: "http://10.132.207.67:9001/sysController/getVerifyCodeImage",
+      url: this.$lc+"sysController/getVerifyCodeImage",
 
 
 
@@ -100,23 +100,23 @@ export default {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
+        console.log(this.LoginAccount.account+' '+this.LoginAccount.password);
         if (valid) {
           this.$axios
-            .post("http://10.132.207.67:9001/sysController/login", {
+            .post(this.$lc +"sysController/login", {
               account: this.LoginAccount.account,
               password: this.LoginAccount.password,
               verifyCode: this.LoginAccount.verifyCode
             })
             .then(res => {
-
               // “001”代表登录成功，其他的均为失败
-              if (res.data.code == "200") {
+              if (res.data.code === 200) {
                 // 隐藏登录组件
                 this.isLogin = false;
 
                 //请求一个info
                 this.$axios
-                    .get("http://10.132.207.67:9001/sysController/info",)
+                    .get(this.$lc +"sysController/info",)
                     .then(function (res){
                       // 登录信息存到本地
                       console.log(res.data.data.account);

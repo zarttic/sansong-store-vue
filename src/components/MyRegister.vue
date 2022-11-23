@@ -138,10 +138,12 @@ export default {
   },
   methods: {
     Register() {
+      console.log(this.RegisterUser.account+' '+this.RegisterUser.password);
       this.$axios
           .post("http://10.132.207.67:9001/sysController/register", {
             account: this.RegisterUser.account,
-            password: this.RegisterUser.password
+            password: this.RegisterUser.password,
+
           })
           .then(res => {
             console.log(res)
