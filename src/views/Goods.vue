@@ -161,7 +161,7 @@ export default {
     },
     // 向后端请求分类列表数据
     getCategory() {
-      this.$axios
+      this.request
         .post("/api/product/getCategory", {})
         .then(res => {
           const val = {
@@ -183,7 +183,7 @@ export default {
         this.categoryID.length == 0
           ? "/api/product/getAllProduct"
           : "/api/product/getProductByCategory";
-      this.$axios
+      this.request
         .post(api, {
           categoryID: this.categoryID,
           currentPage: this.currentPage,
@@ -199,7 +199,7 @@ export default {
     },
     // 通过搜索条件向后端请求商品数据
     getProductBySearch() {
-      this.$axios
+      this.request
         .post("/api/product/getProductBySearch", {
           search: this.search,
           currentPage: this.currentPage,

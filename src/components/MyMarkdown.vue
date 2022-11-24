@@ -20,7 +20,7 @@ export default {
   },
   created() {
     // 从后端请求README.md
-    this.$axios
+    this.request
       .get("https://github.com/zarttic/sansong-store-vue/blob/master/README.md", {})
       .then(res => {
         this.md = res.data;

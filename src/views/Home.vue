@@ -156,11 +156,11 @@ export default {
   },
   created() {
     // 获取轮播图数据
-    this.$axios
+    this.request
       .get(this.$lc +"carouselController/getPic", {})
       .then(res => {
         console.log("轮播")
-        this.carousel = res.data.data;
+        this.carousel = res.data;
         this.carousel.forEach(it =>{
           console.log(it);
         })
@@ -195,8 +195,8 @@ export default {
     },
     // 获取各类商品数据方法封装
     getPromo(categoryName, val, api) {
-      api = api != undefined ? api : "/api/product/getPromoProduct";
-      this.$axios
+      api = api != undefined ? api : "/productController/getPromoProduct";
+      this.request
         .post(api, {
           categoryName
         })

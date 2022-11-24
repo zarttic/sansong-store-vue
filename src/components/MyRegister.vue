@@ -54,7 +54,7 @@ export default {
       // 用户名以字母开头,长度在5-16之间,允许字母数字下划线  !后续修改校验长度
       // const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{1,15}$/;
 
-        // this.$axios
+        // this.request
         //   .post("http://10.132.207.67:9001/sysController/register", {
         //     account: this.RegisterUser.account,
         //     password : this.RegisterUser.password,
@@ -139,7 +139,7 @@ export default {
   methods: {
     Register() {
       console.log(this.RegisterUser.account+' '+this.RegisterUser.password);
-      this.$axios
+      this.request
           .post(this.$lc +"sysController/register", {
             account: this.RegisterUser.account,
             password: this.RegisterUser.password,
