@@ -181,8 +181,8 @@ export default {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
       const api =
         this.categoryID.length == 0
-          ? "/api/product/getAllProduct"
-          : "/api/product/getProductByCategory";
+          ? "/productController/getAllProduct"
+          : "/productController/getPromoProduct";
       this.request
         .post(api, {
           categoryID: this.categoryID,

@@ -4,24 +4,24 @@
 <template>
   <div id="myList" class="myList">
     <ul>
-      <li v-for="item in list" :key="item.product_id">
+      <li v-for="item in list" :key="item.productId">
         <el-popover placement="top">
           <p>确定删除吗？</p>
           <div style="text-align: right; margin: 10px 0 0">
-            <el-button type="primary" size="mini" @click="deleteCollect(item.product_id)">确定</el-button>
+            <el-button type="primary" size="mini" @click="deleteCollect(item.productId)">确定</el-button>
           </div>
           <i class="el-icon-close delete" slot="reference" v-show="isDelete"></i>
         </el-popover>
-        <router-link :to="{ path: '/goods/details', query: {productID:item.product_id} }">
-          <img :src="$lc +item.product_picture" alt />
-          <h2>{{item.product_name}}</h2>
-          <h3>{{item.product_title}}</h3>
+        <router-link :to="{ path: '/goods/details', query: {productID:item.productId} }">
+          <img :src="$lc +item.productPicture" alt />
+          <h2>{{item.productName}}</h2>
+          <h3>{{item.productTitle}}</h3>
           <p>
-            <span>{{item.product_selling_price}}元</span>
+            <span>{{item.productSellingPrice}}元</span>
             <span
-              v-show="item.product_price != item.product_selling_price"
+              v-show="item.productPrice != item.productSellingPrice"
               class="del"
-            >{{item.product_price}}元</span>
+            >{{item.productSellingPrice}}元</span>
           </p>
         </router-link>
       </li>
