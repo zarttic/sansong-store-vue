@@ -6,8 +6,8 @@
     <!-- 轮播图 -->
     <div class="swiper-box" >
       <el-carousel height="40vh" type="card">
-        <el-carousel-item v-for="item in carousel" :key="item.carousel_id" >
-          <img   :src="$target + item.imgPath" :alt="item.describes" />
+        <el-carousel-item v-for="item in carousel" :key="item.carousel_id"  >
+          <img  :src="require('../../'+item.imgpath)" :alt="item.describes" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -22,7 +22,7 @@
           <div class="box-bd">
             <div class="promo-list">
               <router-link to>
-                <img :src="$target +'public/imgs/phone/phone.png'" />
+                <img :src="require('../../public/imgs/phone/phone.png')"/>
               </router-link>
             </div>
             <div class="list">
@@ -47,10 +47,10 @@
             <div class="promo-list">
               <ul>
                 <li>
-                  <img :src="$target +'public/imgs/appliance/appliance-promo1.png'" />
+                  <img :src="require('../../public/imgs/appliance/appliance-promo1.png')" />
                 </li>
                 <li>
-                  <img :src="$target +'public/imgs/appliance/appliance-promo2.png'" />
+                  <img :src="require('../../public/imgs/appliance/appliance-promo2.png')" />
                 </li>
               </ul>
             </div>
@@ -77,10 +77,10 @@
             <div class="promo-list">
               <ul>
                 <li>
-                  <img :src="$target +'public/imgs/accessory/accessory-promo1.png'" alt />
+                  <img :src="require('../../public/imgs/accessory/accessory-promo1.png')" alt />
                 </li>
                 <li>
-                  <img :src="$target +'public/imgs/accessory/accessory-promo2.png'" alt />
+                  <img :src="require('../../public/imgs/accessory/accessory-promo2.png')" alt />
                 </li>
               </ul>
             </div>
@@ -157,9 +157,13 @@ export default {
   created() {
     // 获取轮播图数据
     this.$axios
-      .post("/api/resources/carousel", {})
+      .get(this.$lc +"carouselController/getPic", {})
       .then(res => {
-        this.carousel = res.data.carousel;
+        console.log("轮播")
+        this.carousel = res.data.data;
+        this.carousel.forEach(it =>{
+          console.log(it);
+        })
       })
       .catch(err => {
         return Promise.reject(err);

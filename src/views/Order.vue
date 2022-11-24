@@ -36,7 +36,7 @@
           <li class="product-list" v-for="(product,i) in item" :key="i">
             <div class="pro-img">
               <router-link :to="{ path: '/goods/details', query: {productID:product.product_id} }">
-                <img :src="$target + product.product_picture" />
+                <img :src="$lc + product.product_picture" />
               </router-link>
             </div>
             <div class="pro-name">
@@ -90,11 +90,11 @@ export default {
   activated() {
     // 获取订单数据
     this.$axios
-      .post("/api/user/order/getOrder", {
-        user_id: this.$store.getters.getAccount.user_id
+      .post(this.$lc + "ordersController/getOrdersById", {
+        userId: this.$store.getters.getUserId
       })
       .then(res => {
-        if (res.data.code === "001") {
+        if (res.data.code === 200) {
           this.orders = res.data.orders;
         } else {
           this.notifyError(res.data.msg);

@@ -40,7 +40,7 @@
           </div>
           <div class="pro-img">
             <router-link :to="{ path: '/goods/details', query: {productID:item.productID} }">
-              <img :src="$target + item.productImg" />
+              <img :src="$lc + item.productImg" />
             </router-link>
           </div>
           <div class="pro-name">
@@ -129,14 +129,14 @@ export default {
       this.updateShoppingCart({ key: key, prop: "check", val: true });
       // 向后端发起更新购物车的数据库信息请求
       this.$axios
-        .post("/api/user/shoppingCart/updateShoppingCart", {
-          user_id: this.$store.getters.getAccount.user_id,
+        .post(this.$lc+"shopcarController/updateShopCar", {
+          user_id: this.$store.getters.getUserId,
           product_id: productID,
           num: currentValue
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "200":
               // “001”代表更新成功
               // 更新vuex状态
               this.updateShoppingCart({
@@ -160,7 +160,7 @@ export default {
       // 更新vuex中购物车商品是否勾选的状态
       this.updateShoppingCart({ key: key, prop: "check", val: val });
     },
-    // 向后端发起删除购物车的数据库信息请求
+    // 向后端发起删除购物车的数据库信息请求 TODO
     deleteItem(e, id, productID) {
       this.$axios
         .post("/api/user/shoppingCart/deleteShoppingCart", {
@@ -169,7 +169,7 @@ export default {
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "200":
               // “001” 删除成功
               // 更新vuex状态
               this.deleteShoppingCart(id);

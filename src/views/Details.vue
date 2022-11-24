@@ -30,13 +30,13 @@
       <div class="block">
         <el-carousel height="560px" v-if="productPicture.length>1">
           <el-carousel-item v-for="item in productPicture" :key="item.id">
-            <img style="height:560px;" :src="$target + item.product_picture" :alt="item.intro" />
+            <img style="height:560px;" :src="$lc + item.product_picture" :alt="item.intro" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPicture.length===1">
           <img
             style="height:560px;"
-            :src="$target + productPicture[0].product_picture"
+            :src="$lc + productPicture[0].product_picture"
             :alt="productPicture[0].intro"
           />
         </div>
@@ -161,7 +161,7 @@ export default {
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "200":
               // 新加入购物车成功
               this.unshiftShoppingCart(res.data.shoppingCartData[0]);
               this.notifySucceed(res.data.msg);
@@ -191,12 +191,12 @@ export default {
         return;
       }
       this.$axios
-        .post("/api/user/collect/addCollect", {
-          user_id: this.$store.getters.getAccount.user_id,
-          product_id: this.productID
+        .post(this.$lc + "/collectController/addCollect", {
+          userId: this.$store.getters.getUserId,
+          productId: this.productID
         })
         .then(res => {
-          if (res.data.code == "001") {
+          if (res.data.code === 200) {
             // 添加收藏成功
             this.notifySucceed(res.data.msg);
           } else {

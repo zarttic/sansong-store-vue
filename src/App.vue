@@ -192,7 +192,7 @@ export default {
       this.setAccount("");
       this.setUserId("");
       this.$axios
-          .get('http://10.131.133.134:9001/sysController/exit')
+          .get(this.$lc + 'sysController/exit')
       this.notifySucceed("成功退出登录");
       location.reload();
     },
