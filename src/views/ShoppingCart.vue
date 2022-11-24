@@ -128,7 +128,7 @@ export default {
       // 当修改数量时，默认勾选
       this.updateShoppingCart({ key: key, prop: "check", val: true });
       // 向后端发起更新购物车的数据库信息请求
-      this.$axios
+      this.request
         .post(this.$lc+"shopcarController/updateShopCar", {
           user_id: this.$store.getters.getUserId,
           product_id: productID,
@@ -162,7 +162,7 @@ export default {
     },
     // 向后端发起删除购物车的数据库信息请求 TODO
     deleteItem(e, id, productID) {
-      this.$axios
+      this.request
         .post("/api/user/shoppingCart/deleteShoppingCart", {
           user_id: this.$store.getters.getAccount.user_id,
           product_id: productID

@@ -89,7 +89,7 @@ export default {
   },
   activated() {
     // 获取订单数据
-    this.$axios
+    this.request
       .post(this.$lc + "ordersController/getOrdersById", {
         userId: this.$store.getters.getUserId
       })
