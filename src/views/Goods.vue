@@ -22,9 +22,9 @@
         <el-tabs v-model="activeName" type="card">
           <el-tab-pane
             v-for="item in categoryList"
-            :key="item.category_id"
-            :label="item.category_name"
-            :name="''+item.category_id"
+            :key="item.categoryId"
+            :label="item.categoryName"
+            :name="''+item.categoryId"
           />
         </el-tabs>
       </div>
@@ -162,13 +162,13 @@ export default {
     // 向后端请求分类列表数据
     getCategory() {
       this.request
-        .post("/api/product/getCategory", {})
+        .get("/categoryController/getCategories", {})
         .then(res => {
           const val = {
             category_id: 0,
             category_name: "全部"
           };
-          const cate = res.data.category;
+          const cate = res.data;
           cate.unshift(val);
           this.categoryList = cate;
         })
@@ -178,19 +178,22 @@ export default {
     },
     // 向后端请求全部商品或分类商品数据
     getData() {
-      // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
+      // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据s
       const api =
-        this.categoryID.length == 0
-          ? "/productController/getAllProduct"
-          : "/productController/getPromoProduct";
+        this.categoryID.length === 0
+          ? "/productController/getProductPage"
+          : "/productController/getProductPageBycategory";
       this.request
-        .post(api, {
-          categoryID: this.categoryID,
-          currentPage: this.currentPage,
-          pageSize: this.pageSize
+        .get(api, {
+          params:{
+            pageNo: this.currentPage,
+            pageSize: this.pageSize,
+            categoryID: this.categoryID[0],
+          },
+
         })
         .then(res => {
-          this.product = res.data.Product;
+          this.product = res.data.records;
           this.total = res.data.total;
         })
         .catch(err => {
@@ -200,13 +203,15 @@ export default {
     // 通过搜索条件向后端请求商品数据
     getProductBySearch() {
       this.request
-        .post("/api/product/getProductBySearch", {
-          search: this.search,
-          currentPage: this.currentPage,
-          pageSize: this.pageSize
+        .get("/productController/getProductBySearch", {
+          params:{
+            search: this.search,
+            pageNo: this.currentPage,
+            pageSize: this.pageSize
+          }
         })
         .then(res => {
-          this.product = res.data.Product;
+          this.product = res.data.records;
           this.total = res.data.total;
         })
         .catch(err => {

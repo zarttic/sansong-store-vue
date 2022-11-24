@@ -21,12 +21,12 @@
             <span
               v-show="item.productPrice != item.productSellingPrice"
               class="del"
-            >{{item.productSellingPrice}}元</span>
+            >{{item.productPrice}}元</span>
           </p>
         </router-link>
       </li>
       <li v-show="isMore && list.length>=1" id="more">
-        <router-link :to="{ path: '/goods', query: {categoryID:categoryID} }">
+        <router-link :to="{ path: '/goods', query: {categoryID:categoryId} }">
           浏览更多
           <i class="el-icon-d-arrow-right"></i>
         </router-link>
@@ -47,9 +47,9 @@ export default {
     // 通过list获取当前显示的商品的分类ID，用于“浏览更多”链接的参数
     categoryID: function() {
       let categoryID = [];
-      if (this.list != "") {
+      if (this.list !== "") {
         for (let i = 0; i < this.list.length; i++) {
-          const id = this.list[i].category_id;
+          const id = this.list[i].categoryId;
           if (!categoryID.includes(id)) {
             categoryID.push(id);
           }
@@ -59,20 +59,20 @@ export default {
     }
   },
   methods: {
-    deleteCollect(product_id) {
+    deleteCollect(productId) {
       this.request
-        .post("/api/user/collect/deleteCollect", {
-          user_id: this.$store.getters.getAccount.user_id,
-          product_id: product_id
+        .post("/collectController/delCollect", {
+          userId: this.$store.getters.getAccount.userId,
+          productId: productId
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "200":
               // 删除成功
               // 删除删除列表中的该商品信息
               for (let i = 0; i < this.list.length; i++) {
                 const temp = this.list[i];
-                if (temp.product_id == product_id) {
+                if (temp.productId === productId) {
                   this.list.splice(i, 1);
                 }
               }
