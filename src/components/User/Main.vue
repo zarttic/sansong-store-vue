@@ -112,7 +112,7 @@
 export default {
   mounted() {
     this.$axios
-        .get("http://10.131.133.134:9001/sysController/info").then(res => {
+        .get(this.$lc +"sysController/info").then(res => {
       console.log(res)
       this.userForm = res.data.data
       console.log(this.userForm)
@@ -194,7 +194,7 @@ export default {
       let role = this.userForm.role;
       let createTime = this.userForm.createTime;
       let updateTime = this.userForm.updateTime;
-      this.$axios.post("http://10.131.133.134:9001/userController/updateUser", {
+      this.$axios.post(this.$lc+"userController/updateUser", {
         userId, account, username, password, phone, isDel, role, createTime, updateTime
       }).then(res => {
         if (res.data.code == "200") {

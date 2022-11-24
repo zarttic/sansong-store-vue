@@ -46,7 +46,7 @@
         <div class="goods-list">
           <ul>
             <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="$target + item.productImg" />
+              <img :src="$lc + item.productImg" />
               <span class="pro-name">{{item.productName}}</span>
               <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
               <span class="pro-status"></span>
@@ -169,7 +169,7 @@ export default {
           let products = this.getCheckGoods;
           switch (res.data.code) {
             // “001”代表结算成功
-            case "001":
+            case "200":
               for (let i = 0; i < products.length; i++) {
                 const temp = products[i];
                 // 删除已经结算的购物车商品

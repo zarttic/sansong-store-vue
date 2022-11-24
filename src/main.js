@@ -17,32 +17,34 @@ Vue.use(Global);
 import Axios from 'axios';
 Vue.prototype.$axios = Axios;
 // 全局请求拦截器
-Axios.interceptors.request.use(
-  config => {
-    return config;
-  },
-  error => {
-    // 跳转error页面
-    router.push({ path: "/error" });
-    return Promise.reject(error);
-  }
-);
+// Axios.interceptors.request.use(
+//   config => {
+//     return config;
+//   },
+//   error => {
+//     // 跳转error页面
+//     router.push({ path: "/error" });
+//     return Promise.reject(error);
+//   }
+// );
 // // 全局响应拦截器
 // Axios.interceptors.response.use(
 //   res => {
-//     if (res.data.code === "401") {
-//       // 401表示没有登录
+//     console.log("全局响应拦截器\n");
+//     console.log(res.data)
+//     if (res.data.code === 201) {
+//       // 201表示没有登录
 //       // 提示没有登录
-//       Vue.prototype.notifyError(res.data.msg);
+//       Vue.prototype.notifyError(res.data.message);
 //       // 修改vuex的showLogin状态,显示登录组件
 //       store.dispatch("setShowLogin", true);
-//       console.log("全局响应拦截器");
 //     }
-//     if (res.data.code === "500") {
+//     if (res.data.code === 500 ) {
 //       // 500表示服务器异常
 //       // 跳转error页面
 //       router.push({ path: "/error" });
 //     }
+//     console.log("全局响应拦截器通过");
 //     return res;
 //   },
 //   error => {
@@ -51,29 +53,48 @@ Axios.interceptors.request.use(
 //     return Promise.reject(error);
 //   }
 // );
-//
-// // 全局拦截器,在进入需要用户权限的页面前校验是否已经登录
-// router.beforeResolve((to, from, next) => {
-//   const loginUser = store.state.account;
-//   console.log("拦截器"+loginUser);
-//   console.log(store.state.showLogin);
-//   // 判断路由是否设置相应校验用户权限
-//   if (to.meta.requireAuth) {
-//     if (!loginUser) {
-//       // 没有登录，显示登录组件
-//       store.dispatch("setShowLogin", true);
-//       if (from.name == null) {
-//         //此时，是在页面没有加载，直接在地址栏输入链接，进入需要登录验证的页面
-//         next("/");
-//         return;
-//       }
-//       // 终止导航
-//       next(false);
-//       return;
-//     }
-//   }
-//   next();
-// });
+
+// 全局响应拦截器  by (LPY)
+Axios.interceptors.response.use(
+    res => {
+      if (res.data.code === 500 ) {
+        // 500表示服务器异常
+        // 跳转error页面
+        router.push({ path: "/error" });
+      }
+      return res;
+    },
+    error => {
+      // 跳转error页面
+      router.push({ path: "/error" });
+      return Promise.reject(error);
+    }
+);
+
+
+
+
+
+// 全局拦截器,在进入需要用户权限的页面前校验是否已经登录
+router.beforeResolve((to, from, next) => {
+  const loginUser = store.state.user.account;
+  // 判断路由是否设置相应校验用户权限
+  if (to.meta.requireAuth) {
+    if (loginUser==="") {
+      // 没有登录，显示登录组件
+      store.dispatch("setShowLogin", true);
+      if (from.name == null) {
+        //此时，是在页面没有加载，直接在地址栏输入链接，进入需要登录验证的页面
+        next("/");
+        return;
+      }
+      // 终止导航
+      next(false);
+      return;
+    }
+  }
+  next();
+});
 
 // 相对时间过滤器,把时间戳转换成时间
 // 格式: 2020-02-25 21:43:23
