@@ -21,7 +21,7 @@
             <span
               v-show="item.productPrice != item.productSellingPrice"
               class="del"
-            >{{item.productSellingPrice}}元</span>
+            >{{item.productPrice}}元</span>
           </p>
         </router-link>
       </li>
