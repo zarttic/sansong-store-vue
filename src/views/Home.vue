@@ -126,38 +126,38 @@ export default {
       if (this.applianceHotList === "") {
         this.applianceHotList = this.applianceList;
       }
-      if (val == 1) {
+      if (val === 1) {
         // 1为热门商品
         this.applianceList = this.applianceHotList;
         return;
       }
-      if (val == 2) {
+      if (val === 2) {
         // 2为电视商品
         this.applianceList = this.miTvList;
-        return;
       }
     },
     accessoryActive: function(val) {
       // 页面初始化的时候把accessoryHotList(热门配件商品列表)直接赋值给accessoryList(配件商品列表)
       // 所以在切换商品列表时判断accessoryHotList是否为空,为空则是第一次切换,把accessoryList赋值给accessoryHotList
-      if (this.accessoryHotList == "") {
+      if (this.accessoryHotList === "") {
         this.accessoryHotList = this.accessoryList;
+        this.shuffle(this.accessoryHotList);
 
       }
-      if (val == 1) {
+      if (val === 1) {
         // 1为热门商品
         this.accessoryList = this.accessoryHotList;
         return;
       }
-      if (val == 2) {
+      if (val === 2) {
         // 2为保护套商品
         this.accessoryList = this.protectingShellList;
         return;
       }
-      if (val == 3) {
+      if (val === 3) {
         //3 为充电器商品
         this.accessoryList = this.chargerList;
-        return;
+
       }
     }
   },
@@ -196,6 +196,7 @@ export default {
     );
   },
   methods: {
+
     // 获取家电模块子组件传过来的数据
     getChildMsg(val) {
       this.applianceActive = val;
@@ -240,6 +241,18 @@ export default {
               return Promise.reject(err);
             });
       }
+    },
+    shuffle(arr){
+      let length = arr.length,
+          randomIndex,
+          temp;
+      while (length) {
+        randomIndex = Math.floor(Math.random() * (length--));
+        temp = arr[randomIndex];
+        arr[randomIndex] = arr[length];
+        arr[length] = temp
+      }
+      return arr;
     }
   }
 };

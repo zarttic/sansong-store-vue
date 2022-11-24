@@ -203,13 +203,15 @@ export default {
     // 通过搜索条件向后端请求商品数据
     getProductBySearch() {
       this.request
-        .post("/api/product/getProductBySearch", {
-          search: this.search,
-          pageNo: this.currentPage,
-          pageSize: this.pageSize
+        .get("/productController/getProductBySearch", {
+          params:{
+            search: this.search,
+            pageNo: this.currentPage,
+            pageSize: this.pageSize
+          }
         })
         .then(res => {
-          this.product = res.data.Product;
+          this.product = res.data.records;
           this.total = res.data.total;
         })
         .catch(err => {
