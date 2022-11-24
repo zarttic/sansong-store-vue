@@ -176,19 +176,23 @@ export default {
         return Promise.reject(err);
       });
     // 获取各类商品数据
-    this.getPromo("手机", "phoneList");
-    this.getPromo("电视机", "miTvList");
-    this.getPromo("保护套", "protectingShellList");
-    this.getPromo("充电器", "chargerList");
+    this.getPromo("手机", "phoneList",1);
+
+    this.getPromo("电视机", "miTvList",1);
+    this.getPromo("保护套", "protectingShellList",1);
+    this.getPromo("充电器", "chargerList",1);
     this.getPromo(
       ["电视机", "空调", "洗衣机"],
       "applianceList",
-      "/api/product/getHotProduct"
+
+      "/productController/getHotProduct",
+
     );
     this.getPromo(
       ["保护套", "保护膜", "充电器", "充电宝"],
       "accessoryList",
-      "/api/product/getHotProduct"
+        2,
+      "/productController/getHotProduct"
     );
   },
   methods: {
@@ -201,18 +205,41 @@ export default {
       this.accessoryActive = val;
     },
     // 获取各类商品数据方法封装
-    getPromo(categoryName, val, api) {
-      api = api != undefined ? api : "/productController/getPromoProduct";
-      this.request
-        .post(api, {
-          categoryName
-        })
-        .then(res => {
-          this[val] = res.data.Product;
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
+    getPromo(categoryName, val,tag,api) {
+      api = api !== undefined ? api : "/productController/getPromoProduct";
+      if (tag === 1){
+        console.log("len = 1" + categoryName )
+
+        this.request
+            .get(api, {
+              params:{
+                categoryName
+              }
+            })
+            .then(res => {
+              this[val] = res.data;
+
+              if (categoryName === "手机"){
+                console.log(this.phoneList)
+              }
+            })
+            .catch(err => {
+              return Promise.reject(err);
+            });
+
+      }else {
+        this.request
+            .post(api, {
+                categoryName
+            })
+            .then(res => {
+              this[val] = res.data;
+              console.log(categoryName+" ___"+this[val])
+            })
+            .catch(err => {
+              return Promise.reject(err);
+            });
+      }
     }
   }
 };
