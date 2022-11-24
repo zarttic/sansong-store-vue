@@ -5,7 +5,7 @@
   <div class="home" id="home" name="home">
     <!-- 轮播图 -->
     <div class="swiper-box" >
-      <el-carousel height="40vh" type="card">
+      <el-carousel :height="carouselHigh + 'px'" type="card">
         <el-carousel-item v-for="item in carousel" :key="item.carousel_id"  >
           <img  :src="require('../../'+item.imgpath)" :alt="item.describes" />
         </el-carousel-item>
@@ -96,6 +96,12 @@
 </template>
 <script>
 export default {
+  mounted() {
+    this.carouselHigh = window.innerWidth * 450 / 1800;
+    window.onresize = () =>{
+      this.carouselHigh = window.innerWidth * 450 / 1800;
+    }
+  },
   data() {
     return {
       carousel: "", // 轮播图数据
@@ -108,7 +114,8 @@ export default {
       protectingShellList: "", // 保护套商品列表
       chargerList: "", //充电器商品列表
       applianceActive: 1, // 家电当前选中的商品分类
-      accessoryActive: 1 // 配件当前选中的商品分类
+      accessoryActive: 1, // 配件当前选中的商品分类
+      carouselHigh: 600
     };
   },
   watch: {
@@ -212,4 +219,8 @@ export default {
 </script>
 <style scoped>
 @import "../assets/css/index.css";
+img{
+  width: 100%;
+  height: inherit;
+}
 </style>
