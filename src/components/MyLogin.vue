@@ -101,7 +101,7 @@ export default {
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
         if (valid) {
-          this.$axios
+          this.request
             .post(this.$lc +"sysController/login", {
               account: this.LoginAccount.account,
               password: this.LoginAccount.password,
@@ -113,7 +113,7 @@ export default {
                 // 隐藏登录组件
                 this.isLogin = false;
                 //请求一个info
-                this.$axios
+                this.request
                     .get(this.$lc +"sysController/info",)
                     .then(function (res){
                       // 登录信息存到本地

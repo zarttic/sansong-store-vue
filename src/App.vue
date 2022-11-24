@@ -149,7 +149,7 @@ export default {
       } else {
         // 用户已经登录,获取该用户的购物车信息
         console.log(localStorage.getItem("userId"))
-        this.$axios
+        this.request
           .get(this.$lc + "shopcarController/getshopcar", {
             'params':{
               userId: localStorage.getItem("userId")
@@ -191,7 +191,7 @@ export default {
       // 清空vuex登录信息
       this.setAccount("");
       this.setUserId("");
-      this.$axios
+      this.request
           .get(this.$lc + 'sysController/exit')
       this.notifySucceed("成功退出登录");
       location.reload();

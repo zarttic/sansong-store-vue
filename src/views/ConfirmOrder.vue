@@ -160,7 +160,7 @@ export default {
   methods: {
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
-      this.$axios
+      this.request
         .post("/api/user/order/addOrder", {
           user_id: this.$store.getters.getAccount.user_id,
           products: this.getCheckGoods

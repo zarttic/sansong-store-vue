@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     deleteCollect(product_id) {
-      this.$axios
+      this.request
         .post("/api/user/collect/deleteCollect", {
           user_id: this.$store.getters.getAccount.user_id,
           product_id: product_id

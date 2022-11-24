@@ -122,7 +122,7 @@ export default {
     ...mapActions(["unshiftShoppingCart", "addShoppingCartNum"]),
     // 获取商品详细信息
     getDetails(val) {
-      this.$axios
+      this.request
         .post("/api/product/getDetails", {
           productID: val
         })
@@ -135,7 +135,7 @@ export default {
     },
     // 获取商品图片
     getDetailsPicture(val) {
-      this.$axios
+      this.request
         .post("/api/product/getDetailsPicture", {
           productID: val
         })
@@ -153,7 +153,7 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.$axios
+      this.request
         .post(this.$lc + "ordersController/addShopCar", {
           userId: localStorage.getItem("id"),
           productId: this.productID,
@@ -190,7 +190,7 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.$axios
+      this.request
         .post(this.$lc + "/collectController/addCollect", {
           userId: this.$store.getters.getUserId,
           productId: this.productID

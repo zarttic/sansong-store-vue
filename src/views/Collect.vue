@@ -34,7 +34,7 @@ export default {
   },
   activated() {
     // 获取收藏数据
-    this.$axios
+    this.request
       .post(this.$lc+"collectController/getCollects", {
         userId: this.$store.getters.getUserId
       })
