@@ -4,10 +4,10 @@
 <template>
   <div class="home" id="home" name="home">
     <!-- 轮播图 -->
-    <div class="block" >
-      <el-carousel height="460px" type="card">
-        <el-carousel-item v-for="item in carousel" :key="item.carousel_id">
-          <img style="height:460px;" :src="$target + item.imgPath" :alt="item.describes" />
+    <div class="swiper-box" >
+      <el-carousel height="40vh" type="card">
+        <el-carousel-item v-for="item in carousel" :key="item.carousel_id" >
+          <img   :src="$target + item.imgPath" :alt="item.describes" />
         </el-carousel-item>
       </el-carousel>
     </div>
