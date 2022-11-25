@@ -19,6 +19,7 @@ export default {
   },
   getters: {
     getShoppingCart (state) {
+      console.log(state.shoppingCart)
       // 获取购物车状态
       return state.shoppingCart;
     },
