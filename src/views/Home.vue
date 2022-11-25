@@ -85,7 +85,7 @@
               </ul>
             </div>
             <div class="list">
-              <MyList :list="accessoryList" :isMore="true"></MyList>
+              <MyList :list="accessoryList" :isMore="true"> </MyList>
             </div>
           </div>
         </div>
