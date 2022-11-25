@@ -162,7 +162,6 @@ export default {
 
             if (res.code === 200) {
               // 001 为成功, 更新vuex购物车状态
-              console.log("更新vuex购物车状态")
               this.setShoppingCart(res.data);
             } else {
               // 提示失败信息

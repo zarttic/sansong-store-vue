@@ -30,13 +30,13 @@
       <div class="block">
         <el-carousel height="560px" v-if="productPicture.length>1">
           <el-carousel-item v-for="item in productPicture" :key="item.id">
-            <img style="height:560px;" :src="$lc + item.productPicture" :alt="item.intro" />
+            <img style="height:560px;" :src="require('../../' + item.productPicture)" :alt="item.intro" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPicture.length===1">
           <img
             style="height:560px;"
-            :src="$lc + productPicture[0].productPicture"
+            :src="productPicture[0].productPicture"
             :alt="productPicture[0].intro"
           />
         </div>
@@ -96,6 +96,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import shoppingCart from "@/store/modules/shoppingCart";
 export default {
   data() {
     return {
@@ -129,6 +130,7 @@ export default {
           },
         })
         .then(res => {
+          console.log("获取商品详细信息",res)
           this.productDetails = res.data
         })
         .catch(err => {
@@ -146,6 +148,7 @@ export default {
         })
         .then(res => {
           //此处需要修改
+          console.log("获取商品图片",res.data)
           this.productPicture = res.data;
         })
         .catch(err => {
@@ -153,37 +156,37 @@ export default {
         });
     },
     // 加入购物车
-    addShoppingCart() {
+    addShoppingCart(state) {
       // 判断是否登录,没有登录则显示登录组件
       if (!this.$store.getters.getAccount) {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.request
-        .post(this.$lc + "ordersController/addShopCar", {
-          userId: localStorage.getItem("id"),
-          productId: this.productID,
+      //判断是否与购物车原有商品重复
+      console.log(state.shoppingCart);
+      let the_same_id=-1;
+      for (let i = 0; i < state.shoppingCart.length; i++) {
+        const temp =shoppingCart[i];
+        if (temp.product.productId===this.productID) {
+          the_same_id=i;
+        }
+      }
 
+      this.request
+        .post(this.$lc + "shopcarController/addShopCar", {
+          userId: localStorage.getItem("userId"),
+          productId: the_same_id===-1?this.productID:shoppingCart[the_same_id].product.productId,
+          num: the_same_id===-1?shoppingCart[the_same_id].num+1:1,
         })
         .then(res => {
-          switch (res.data.code) {
-            case "200":
+          switch (res.code) {
+            case 200:
               // 新加入购物车成功
               this.unshiftShoppingCart(res.data.shoppingCartData[0]);
-              this.notifySucceed(res.data.msg);
-              break;
-            case "002":
-              // 该商品已经在购物车，数量+1
-              this.addShoppingCartNum(this.productID);
-              this.notifySucceed(res.data.msg);
-              break;
-            case "003":
-              // 商品数量达到限购数量
-              this.dis = true;
-              this.notifyError(res.data.msg);
+              this.notifySucceed(res.message);
               break;
             default:
-              this.notifyError(res.data.msg);
+              this.notifyError(res.message);
           }
         })
         .catch(err => {

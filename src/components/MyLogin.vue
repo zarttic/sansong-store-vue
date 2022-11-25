@@ -131,7 +131,7 @@ export default {
 
                 // 弹出通知框提示登录成功信息
                 this.notifySucceed(res.msg);
-                // location.reload();
+                location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();

@@ -55,7 +55,7 @@
               :value="item.num"
               @change="handleChange($event,index,item.product.productId)"
               :min="1"
-              :max="9"
+              :max="item.product.productNum"
             ></el-input-number>
           </div>
           <div class="pro-total pro-total-in">{{item.product.productSellingPrice * item.num}}元</div>
@@ -135,8 +135,8 @@ export default {
           num: currentValue
         })
         .then(res => {
-          switch (res.data.code) {
-            case "200":
+          switch (res.code) {
+            case 200:
               // “001”代表更新成功
               // 更新vuex状态
               this.updateShoppingCart({
@@ -145,11 +145,11 @@ export default {
                 val: currentValue
               });
               // 提示更新成功信息
-              this.notifySucceed(res.data.msg);
+              this.notifySucceed(res.message);
               break;
             default:
               // 提示更新失败信息
-              this.notifyError(res.data.msg);
+              this.notifyError(res.message);
           }
         })
         .catch(err => {
