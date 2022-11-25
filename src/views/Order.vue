@@ -20,8 +20,8 @@
         <ul>
           <!-- 我的订单表头 -->
           <li class="order-info">
-            <div class="order-id">订单编号: {{item[0].order_id}}</div>
-            <div class="order-time">订单时间: {{item[0].order_time | dateFormat}}</div>
+            <div class="order-id">订单编号: {{item[0].orders.orderId}}</div>
+            <div class="order-time">订单时间: {{item[0].orders.orderTime | dateFormat}}</div>
           </li>
           <li class="header">
             <div class="pro-img"></div>
@@ -35,18 +35,18 @@
           <!-- 订单列表 -->
           <li class="product-list" v-for="(product,i) in item" :key="i">
             <div class="pro-img">
-              <router-link :to="{ path: '/goods/details', query: {productID:product.product_id} }">
-                <img :src="$lc + product.product_picture" />
+              <router-link :to="{ path: '/goods/details', query: {productID:product.orders.productId} }">
+                <img :src=" product.productPic" />
               </router-link>
             </div>
             <div class="pro-name">
               <router-link
-                :to="{ path: '/goods/details', query: {productID:product.product_id} }"
-              >{{product.product_name}}</router-link>
+                :to="{ path: '/goods/details', query: {productID:product.orders.productId} }"
+              >{{product.productName || "未知"}}</router-link>
             </div>
-            <div class="pro-price">{{product.product_price}}元</div>
-            <div class="pro-num">{{product.product_num}}</div>
-            <div class="pro-total pro-total-in">{{product.product_price*product.product_num}}元</div>
+            <div class="pro-price">{{product.orders.productPrice}}元</div>
+            <div class="pro-num">{{product.orders.productNum}}</div>
+            <div class="pro-total pro-total-in">{{product.orders.productPrice * product.orders.productNum}}元</div>
           </li>
         </ul>
         <div class="order-bar">
@@ -90,14 +90,17 @@ export default {
   activated() {
     // 获取订单数据
     this.request
-      .post(this.$lc + "ordersController/getOrdersById", {
-        userId: this.$store.getters.getUserId
+      .get("ordersController/getOrdersById", {
+        params:{
+          userId: this.$store.getters.getUserId
+        }
       })
       .then(res => {
-        if (res.data.code === 200) {
-          this.orders = res.data.orders;
+        console.log(res)
+        if (res.code === 200) {
+          this.orders = res.data;
         } else {
-          this.notifyError(res.data.msg);
+          this.notifyError(res.message);
         }
       })
       .catch(err => {
@@ -107,6 +110,8 @@ export default {
   watch: {
     // 通过订单信息，计算出每个订单的商品数量及总价
     orders: function(val) {
+      console.log("val ->")
+      console.log(val)
       let total = [];
       for (let i = 0; i < val.length; i++) {
         const element = val[i];
@@ -115,8 +120,8 @@ export default {
         let totalPrice = 0;
         for (let j = 0; j < element.length; j++) {
           const temp = element[j];
-          totalNum += temp.product_num;
-          totalPrice += temp.product_price * temp.product_num;
+          totalNum += temp.orders.productNum;
+          totalPrice += temp.orders.productPrice * temp.orders.productNum;
         }
         total.push({ totalNum, totalPrice });
       }
