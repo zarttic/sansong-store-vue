@@ -20,7 +20,8 @@ Vue.prototype.request = request
 
 // 全局拦截器,在进入需要用户权限的页面前校验是否已经登录
 router.beforeResolve((to, from, next) => {
-    const loginUser = store.state.user.account;
+    const loginUser = store.getters.getAccount;
+    console.log("loginUser"+ loginUser)
     // 判断路由是否设置相应校验用户权限
     if (to.meta.requireAuth) {
         if (loginUser === "") {
