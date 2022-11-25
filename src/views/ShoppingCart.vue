@@ -39,26 +39,26 @@
             <el-checkbox :value="item.check" @change="checkChange($event,index)"></el-checkbox>
           </div>
           <div class="pro-img">
-            <router-link :to="{ path: '/goods/details', query: {productID:item.productID} }">
-              <img :src="$lc + item.productImg" />
+            <router-link :to="{ path: '/goods/details', query: {productId:item.product.productId} }">
+              <img :src="require('../../' + item.product.productPicture)" />
             </router-link>
           </div>
           <div class="pro-name">
             <router-link
-              :to="{ path: '/goods/details', query: {productID:item.productID} }"
-            >{{item.productName}}</router-link>
+              :to="{ path: '/goods/details', query: {productId:item.product.productId} }"
+            >{{item.product.productName}}</router-link>
           </div>
-          <div class="pro-price">{{item.price}}元</div>
+          <div class="pro-price">{{item.product.productPrice}}元</div>
           <div class="pro-num">
             <el-input-number
               size="small"
               :value="item.num"
-              @change="handleChange($event,index,item.productID)"
+              @change="handleChange($event,index,item.product.productId)"
               :min="1"
-              :max="item.maxNum"
+              :max="9"
             ></el-input-number>
           </div>
-          <div class="pro-total pro-total-in">{{item.price * item.num}}元</div>
+          <div class="pro-total pro-total-in">{{item.product.productSellingPrice * item.num}}元</div>
           <div class="pro-action">
             <el-popover placement="right">
               <p>确定删除吗？</p>
@@ -66,7 +66,7 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  @click="deleteItem($event,item.id,item.productID)"
+                  @click="deleteItem($event,item.id,item.product.productID)"
                 >确定</el-button>
               </div>
               <i class="el-icon-error" slot="reference" style="font-size: 18px;"></i>
@@ -130,8 +130,8 @@ export default {
       // 向后端发起更新购物车的数据库信息请求
       this.request
         .post(this.$lc+"shopcarController/updateShopCar", {
-          user_id: this.$store.getters.getUserId,
-          product_id: productID,
+          userId: this.$store.getters.getUserId,
+          productId: productID,
           num: currentValue
         })
         .then(res => {
@@ -157,6 +157,8 @@ export default {
         });
     },
     checkChange(val, key) {
+      console.log("val: "+ val);
+      console.log("key: "+ key);
       // 更新vuex中购物车商品是否勾选的状态
       this.updateShoppingCart({ key: key, prop: "check", val: val });
     },
