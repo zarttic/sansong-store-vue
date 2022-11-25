@@ -197,17 +197,19 @@ export default {
         return;
       }
       this.request
-        .post(this.$lc + "/collectController/addCollect", {
-          userId: this.$store.getters.getUserId,
-          productId: this.productID
+        .get( "/collectController/addCollect", {
+          params:{
+            userId: this.$store.getters.getUserId,
+            productId: this.productID
+          }
         })
         .then(res => {
-          if (res.data.code === 200) {
+          if (res.code === 200) {
             // 添加收藏成功
-            this.notifySucceed(res.data.msg);
+            this.notifySucceed(res.message);
           } else {
             // 添加收藏失败
-            this.notifyError(res.data.msg);
+            this.notifyError(res.message);
           }
         })
         .catch(err => {
