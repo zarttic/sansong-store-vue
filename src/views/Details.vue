@@ -30,13 +30,13 @@
       <div class="block">
         <el-carousel height="560px" v-if="productPicture.length>1">
           <el-carousel-item v-for="item in productPicture" :key="item.id">
-            <img style="height:560px;" :src="$lc + item.product_picture" :alt="item.intro" />
+            <img style="height:560px;" :src="$lc + item.productPicture" :alt="item.intro" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPicture.length===1">
           <img
             style="height:560px;"
-            :src="$lc + productPicture[0].product_picture"
+            :src="$lc + productPicture[0].productPicture"
             :alt="productPicture[0].intro"
           />
         </div>
@@ -45,26 +45,26 @@
 
       <!-- 右侧内容区 -->
       <div class="content">
-        <h1 class="name">{{productDetails.product_name}}</h1>
-        <p class="intro">{{productDetails.product_intro}}</p>
+        <h1 class="name">{{productDetails.productName}}</h1>
+        <p class="intro">{{productDetails.productIntro}}</p>
         <p class="store">小米自营</p>
         <div class="price">
-          <span>{{productDetails.product_selling_price}}元</span>
+          <span>{{productDetails.productSellingPrice}}元</span>
           <span
-            v-show="productDetails.product_price !== productDetails.product_selling_price"
+            v-show="productDetails.productPrice !== productDetails.productSellingPrice"
             class="del"
-          >{{productDetails.product_price}}元</span>
+          >{{productDetails.productPrice}}元</span>
         </div>
         <div class="pro-list">
-          <span class="pro-name">{{productDetails.product_name}}</span>
+          <span class="pro-name">{{productDetails.productName}}</span>
           <span class="pro-price">
-            <span>{{productDetails.product_selling_price}}元</span>
+            <span>{{productDetails.productSellingPrice}}元</span>
             <span
-              v-show="productDetails.product_price !== productDetails.product_selling_price"
+              v-show="productDetails.productPrice !== productDetails.productSellingPrice"
               class="pro-del"
-            >{{productDetails.product_price}}元</span>
+            >{{productDetails.productPrice}}元</span>
           </span>
-          <p class="price-sum">总计 : {{productDetails.product_selling_price}}元</p>
+          <p class="price-sum">总计 : {{productDetails.productSellingPrice}}元</p>
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
@@ -123,11 +123,13 @@ export default {
     // 获取商品详细信息
     getDetails(val) {
       this.request
-        .post("/api/product/getDetails", {
-          productID: val
+        .get("/productController/getProductById", {
+          params:{
+            id: val
+          },
         })
         .then(res => {
-          this.productDetails = res.data.Product[0];
+          this.productDetails = res.data
         })
         .catch(err => {
           return Promise.reject(err);
@@ -136,11 +138,15 @@ export default {
     // 获取商品图片
     getDetailsPicture(val) {
       this.request
-        .post("/api/product/getDetailsPicture", {
-          productID: val
+        .get("/productpicController/getProductPic", {
+          params:{
+            id: val
+          },
+
         })
         .then(res => {
-          this.productPicture = res.data.ProductPicture;
+          //此处需要修改
+          this.productPicture = res.data;
         })
         .catch(err => {
           return Promise.reject(err);
