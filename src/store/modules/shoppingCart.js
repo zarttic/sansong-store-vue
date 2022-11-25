@@ -1,6 +1,7 @@
 /*
  * @Description: 购物车状态模块
  */
+
 export default {
   state: {
     shoppingCart: []
@@ -19,6 +20,7 @@ export default {
   },
   getters: {
     getShoppingCart (state) {
+      console.log("购物车状态")
       console.log(state.shoppingCart)
       // 获取购物车状态
       return state.shoppingCart;
@@ -58,6 +60,8 @@ export default {
       return checkGoods;
     },
     getCheckNum (state) {
+      console.log("getCheckNum_state")
+      console.log(state)
       // 获取购物车勾选的商品数量
       let totalNum = 0;
       for (let i = 0; i < state.shoppingCart.length; i++) {
@@ -66,6 +70,7 @@ export default {
           totalNum += temp.num;
         }
       }
+      console.log("totalNum = "+ totalNum)
       return totalNum;
     },
     getTotalPrice (state) {
@@ -91,10 +96,16 @@ export default {
       state.shoppingCart.unshift(data);
     },
     updateShoppingCart (state, payload) {
+      // console.log("up_shoppingCart")
+      // console.log(state.shoppingCart)
+      // console.log("upd_state")
+      // console.log(state)
+      // console.log("upd_payload")
+      // console.log(payload)
       // 更新购物车
       // 可更新商品数量和是否勾选
       // 用于购物车点击勾选及加减商品数量
-      if (payload.prop == "num") {
+      if (payload.prop === "num") {
         // 判断效果的商品数量是否大于限购数量或小于1
         if (state.shoppingCart[payload.key].maxNum < payload.val) {
           return;
@@ -105,6 +116,8 @@ export default {
       }
       // 根据商品在购物车的数组的索引和属性更改
       state.shoppingCart[payload.key][payload.prop] = payload.val;
+      console.log("down_shoppingCart")
+      console.log(state.shoppingCart)
     },
     addShoppingCartNum (state, productID) {
       // 增加购物车商品数量
@@ -128,6 +141,10 @@ export default {
       }
     },
     checkAll (state, data) {
+      console.log("checkAll_state")
+      console.log(state)
+      console.log("checkAll_data")
+      console.log(data)
       // 点击全选按钮，更改每个商品的勾选状态
       for (let i = 0; i < state.shoppingCart.length; i++) {
         state.shoppingCart[i].check = data;

@@ -36,7 +36,7 @@
         <!-- 购物车列表 -->
         <li class="product-list" v-for="(item,index) in getShoppingCart" :key="item.id">
           <div class="pro-check">
-            <el-checkbox :value="item.check" @change="checkChange($event,index)"></el-checkbox>
+            <el-checkbox :value="item.check" @change="checkChange($event, index)"></el-checkbox>
           </div>
           <div class="pro-img">
             <router-link :to="{ path: '/goods/details', query: {productId:item.product.productId} }">
@@ -130,7 +130,7 @@ export default {
       this.updateShoppingCart({key: key, prop: "check", val: true});
       // 向后端发起更新购物车的数据库信息请求
       this.request
-          .post( "shopcarController/updateShopCar", {
+          .post("shopcarController/updateShopCar", {
             userId: this.$store.getters.getUserId,
             productId,
             num: currentValue
@@ -146,7 +146,7 @@ export default {
                   val: currentValue
                 });
                 // 提示更新成功信息
-                this.notifySucceed(res.data.msg);
+                this.notifySucceed(res.message);
                 break;
               default:
                 // 提示更新失败信息
@@ -167,7 +167,7 @@ export default {
     deleteItem(e, id, productId) {
       this.request
           .get("/shopcarController/deleteShoppingCart", {
-            params:{
+            params: {
               userId: this.$store.getters.getUserId,
               productId
             }

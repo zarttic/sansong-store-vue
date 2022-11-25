@@ -161,22 +161,25 @@ export default {
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
       this.request
-        .post("/api/user/order/addOrder", {
-          user_id: this.$store.getters.getAccount.user_id,
-          products: this.getCheckGoods
+        .get("/ordersController/addOrders", {
+          params:{
+            userId: this.$store.getters.getUserId,
+          }
+          // products: this.getCheckGoods
         })
         .then(res => {
+          console.log(res)
           let products = this.getCheckGoods;
-          switch (res.data.code) {
+          switch (res.code) {
             // “001”代表结算成功
-            case "200":
+            case 200:
               for (let i = 0; i < products.length; i++) {
                 const temp = products[i];
                 // 删除已经结算的购物车商品
                 this.deleteShoppingCart(temp.id);
               }
               // 提示结算结果
-              this.notifySucceed(res.data.msg);
+              this.notifySucceed(res.message);
               // 跳转我的订单页面
               this.$router.push({ path: "/order" });
               break;
