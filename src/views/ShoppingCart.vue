@@ -137,7 +137,7 @@ export default {
           })
           .then(res => {
             switch (res.code) {
-              case "200":
+              case 200:
                 // “001”代表更新成功
                 // 更新vuex状态
                 this.updateShoppingCart({
@@ -150,7 +150,7 @@ export default {
                 break;
               default:
                 // 提示更新失败信息
-                this.notifyError(res.data.msg);
+                this.notifyError(res.message);
             }
           })
           .catch(err => {
