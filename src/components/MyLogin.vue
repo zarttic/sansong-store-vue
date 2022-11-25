@@ -29,6 +29,7 @@
     </el-dialog>
   </div>
 </template>
+<script href="<%= BASE_URL %>js/md5.js" rel="external nofollow" ></script>
 <script>
 import { mapActions } from "vuex";
 
@@ -108,31 +109,34 @@ export default {
               verifyCode: this.LoginAccount.verifyCode
             })
             .then(res => {
+              console.log(res.code);
               // “001”代表登录成功，其他的均为失败
-              if (res.data.code === 200) {
+              if (res.code === 200) {
                 // 隐藏登录组件
                 this.isLogin = false;
+                //保存token
+                localStorage.setItem("token",res.data);
+                console.log(localStorage.getItem("token"));
                 //请求一个info
                 this.request
                     .get(this.$lc +"sysController/info",)
                     .then(function (res){
                       // 登录信息存到本地
-                      let account1 = JSON.stringify(res.data.data.account);
-                      console.log(account1);
+                      let account1 = JSON.stringify(res.data.account);
                       localStorage.setItem("account",account1);
                       // 登录信息存到vuex
-                      let id1 = JSON.parse(res.data.data.userId);
+                      let id1 = JSON.parse(res.data.userId);
                       localStorage.setItem("userId",id1);
                     })
 
                 // 弹出通知框提示登录成功信息
-                this.notifySucceed(res.data.msg);
-                location.reload();
+                this.notifySucceed(res.msg);
+                // location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
                 // 弹出通知框提示登录失败信息
-                this.notifyError(res.data.msg);
+                this.notifyError(res.msg);
               }
             })
             .catch(err => {
