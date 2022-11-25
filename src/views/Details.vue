@@ -160,17 +160,19 @@ export default {
         return;
       }
       this.request
-        .post(this.$lc + "ordersController/addShopCar", {
-          userId: localStorage.getItem("id"),
+        .post("shopcarController/addShopCar", {
+          userId: this.$store.getters.getUserId,
           productId: this.productID,
-
+          num:1
         })
         .then(res => {
-          switch (res.data.code) {
-            case "200":
+          console.log(res)
+          switch (res.code) {
+            case 200:
               // 新加入购物车成功
+              this.notifySucceed(res.message);
               this.unshiftShoppingCart(res.data.shoppingCartData[0]);
-              this.notifySucceed(res.data.msg);
+
               break;
             case "002":
               // 该商品已经在购物车，数量+1
@@ -197,17 +199,19 @@ export default {
         return;
       }
       this.request
-        .post(this.$lc + "/collectController/addCollect", {
-          userId: this.$store.getters.getUserId,
-          productId: this.productID
+        .get( "/collectController/addCollect", {
+          params:{
+            userId: this.$store.getters.getUserId,
+            productId: this.productID
+          }
         })
         .then(res => {
-          if (res.data.code === 200) {
+          if (res.code === 200) {
             // 添加收藏成功
-            this.notifySucceed(res.data.msg);
+            this.notifySucceed(res.message);
           } else {
             // 添加收藏失败
-            this.notifyError(res.data.msg);
+            this.notifyError(res.message);
           }
         })
         .catch(err => {

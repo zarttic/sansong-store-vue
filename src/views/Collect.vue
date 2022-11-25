@@ -35,12 +35,15 @@ export default {
   activated() {
     // 获取收藏数据
     this.request
-      .post(this.$lc+"collectController/getCollects", {
-        userId: this.$store.getters.getUserId
+      .get(this.$lc+"collectController/getCollects", {
+        params:{
+          userId: this.$store.getters.getUserId
+        }
       })
       .then(res => {
-        if (res.data.code === 200) {
-          this.collectList = res.data.collectList;
+        console.log(res)
+        if (res.code === 200) {
+          this.collectList = res.data;
         }
       })
       .catch(err => {

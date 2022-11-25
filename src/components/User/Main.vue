@@ -114,7 +114,7 @@ export default {
     this.request
         .get(this.$lc +"sysController/info").then(res => {
       console.log(res)
-      this.userForm = res.data.data
+      this.userForm = res.data
       console.log(this.userForm)
     })
   },
@@ -197,10 +197,13 @@ export default {
       this.request.post(this.$lc+"userController/updateUser", {
         userId, account, username, password, phone, isDel, role, createTime, updateTime
       }).then(res => {
-        if (res.data.code == "200") {
+        for (let resKey in res) {
+          console.log("key = " + resKey);
+        }
+        if (res.code == "200") {
           //更新成功
-          // location.reload();
-          window.alert(res.data.message)
+          location.reload();
+          window.alert(res.message)
         }
       })
       this.infoChange = false
