@@ -10,3 +10,9 @@
 
 ## 需要修改
 1. 登录校验需要修改
+
+## 修改日志
+### 11.25: 
+    1.登录时保存token(localstorage)
+    2.请求拦截器保存token
+    3.修改全局拦截器中loginUser的undefined问题

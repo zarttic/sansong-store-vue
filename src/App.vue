@@ -156,14 +156,14 @@ export default {
             }
           })
           .then(res => {
-            res.data.data.forEach(it =>{
+            res.data.forEach(it =>{
               console.log(it);
             })
 
-            if (res.data.code === 200) {
+            if (res.code === 200) {
               // 001 为成功, 更新vuex购物车状态
               console.log("更新vuex购物车状态")
-              this.setShoppingCart(res.data.shoppingCartData);
+              this.setShoppingCart(res.data);
             } else {
               // 提示失败信息
               this.notifyError(res.data.msg);
@@ -188,6 +188,7 @@ export default {
       // 清空本地登录信息
       localStorage.setItem("account", "");
       localStorage.setItem("id", "");
+      localStorage.setItem("token", "");
       // 清空vuex登录信息
       this.setAccount("");
       this.setUserId("");

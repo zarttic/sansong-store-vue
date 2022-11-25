@@ -21,7 +21,6 @@ Vue.prototype.request = request
 // 全局拦截器,在进入需要用户权限的页面前校验是否已经登录
 router.beforeResolve((to, from, next) => {
     const loginUser = store.getters.getAccount;
-    console.log("loginUser"+ loginUser)
     // 判断路由是否设置相应校验用户权限
     if (to.meta.requireAuth) {
         if (loginUser === "") {
@@ -50,6 +49,7 @@ request.interceptors.request.use(config => {
     return config;
 }, error => {
 // 对请求错误做些什么
+    console.log("添加请求拦截器的错误")
     return Promise.reject(error);
 });
 // 相对时间过滤器,把时间戳转换成时间

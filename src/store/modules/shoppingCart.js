@@ -73,7 +73,7 @@ export default {
       for (let i = 0; i < state.shoppingCart.length; i++) {
         const temp = state.shoppingCart[i];
         if (temp.check) {
-          totalPrice += temp.price * temp.num;
+          totalPrice += temp.product.productSellingPrice * temp.num;
         }
       }
       return totalPrice;
@@ -110,8 +110,8 @@ export default {
       // 用于在商品详情页点击添加购物车,后台返回002，“该商品已在购物车，数量 +1”，更新vuex的商品数量
       for (let i = 0; i < state.shoppingCart.length; i++) {
         const temp = state.shoppingCart[i];
-        if (temp.productID == productID) {
-          if (temp.num < temp.maxNum) {
+        if (temp.product.productId === productID) {
+          if (temp.num < temp.product.productNum) {
             temp.num++;
           }
         }
@@ -130,6 +130,7 @@ export default {
       // 点击全选按钮，更改每个商品的勾选状态
       for (let i = 0; i < state.shoppingCart.length; i++) {
         state.shoppingCart[i].check = data;
+        console.log(state.shoppingCart[i].check);
       }
     }
   },
