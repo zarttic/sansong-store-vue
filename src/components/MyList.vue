@@ -61,13 +61,15 @@ export default {
   methods: {
     deleteCollect(productId) {
       this.request
-        .post("/collectController/delCollect", {
-          userId: this.$store.getters.getAccount.userId,
-          productId: productId
+        .delete("/collectController/delCollect", {
+          params:{
+            userId: this.$store.getters.getUserId,
+            productId: productId
+          }
         })
         .then(res => {
-          switch (res.data.code) {
-            case "200":
+          switch (res.code) {
+            case 200:
               // 删除成功
               // 删除删除列表中的该商品信息
               for (let i = 0; i < this.list.length; i++) {
@@ -77,11 +79,11 @@ export default {
                 }
               }
               // 提示删除成功信息
-              this.notifySucceed(res.data.msg);
+              this.notifySucceed(res.message);
               break;
             default:
               // 提示删除失败信息
-              this.notifyError(res.data.msg);
+              this.notifyError(res.message);
           }
         })
         .catch(err => {
