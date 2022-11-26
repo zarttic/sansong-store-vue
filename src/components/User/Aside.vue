@@ -2,7 +2,7 @@
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
     <el-menu :default-openeds="['1','2', '3']">
       <el-submenu index="1">
-        <template slot="title"><i class="el-icon-user"></i>用户</template>
+        <template slot="title"><i class="el-icon-user"></i>用户信息</template>
         <el-menu-item-group>
           <el-menu-item index="1-1">用户详情</el-menu-item>
 <!--          <el-menu-item index="1-2" onclick="javascript:openUpdateModal();">信息修改</el-menu-item>-->

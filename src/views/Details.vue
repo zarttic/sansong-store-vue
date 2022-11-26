@@ -29,7 +29,7 @@
       <!-- 左侧商品轮播图 -->
       <div class="block">
         <el-carousel height="560px" v-if="productPicture.length>1">
-          <el-carousel-item v-for="item in productPicture" :key="item.id">
+          <el-carousel-item v-for="item in productPicture" :key="item.id" >
             <img style="height:560px;" :src="require('../../'+item.productPicture)" :alt="item.intro" />
           </el-carousel-item>
         </el-carousel>

@@ -7,8 +7,11 @@
           <i class="el-icon-user"></i>
           账号
         </template>
-        {{ userForm.account }}
-
+        <el-tooltip content="账号不可以修改">
+          <div>
+            {{ userForm.account }}
+          </div>
+        </el-tooltip>
       </el-descriptions-item>
 
       <el-descriptions-item>
@@ -17,8 +20,12 @@
           昵称
         </template>
 
-        <el-link icon="el-icon-edit"  @click="usernameChange = true">{{ userForm.username }}</el-link>
-<!--        <el-button type="primary" icon="el-icon-edit" round></el-button>-->
+        <el-tooltip content="点击即可修改用户名">
+          <div>
+            <el-link icon="el-icon-edit" @click="usernameChange = true">{{ userForm.username }}</el-link>
+          </div>
+        </el-tooltip>
+        <!--        <el-button type="primary" icon="el-icon-edit" round></el-button>-->
       </el-descriptions-item>
 
 
@@ -27,8 +34,13 @@
           <i class="el-icon-lock"></i>
           密码
         </template>
-        <el-link icon="el-icon-edit"  @click="passwordChange = true">修改密码</el-link>
-<!--        <el-button type="primary" icon="el-icon-edit"  round>修改密码</el-button>-->
+        <el-tooltip content="点击即可修改密码">
+          <div>
+            <el-link icon="el-icon-edit" @click="passwordChange = true">修改密码</el-link>
+          </div>
+        </el-tooltip>
+
+        <!--        <el-button type="primary" icon="el-icon-edit"  round>修改密码</el-button>-->
       </el-descriptions-item>
 
 
@@ -37,23 +49,26 @@
           <i class="el-icon-mobile-phone"></i>
           手机号
         </template>
+        <el-tooltip content="点击即可修改手机号">
+          <div>
+            <el-link icon="el-icon-edit" @click="phoneChange = true">{{ userForm.phone }}</el-link>
+          </div>
+        </el-tooltip>
 
-        <el-link icon="el-icon-edit"  @click="phoneChange = true">{{ userForm.phone }}</el-link>
-<!--        <el-button type="primary" icon="el-icon-edit"  round>修改手机号</el-button>-->
+        <!--        <el-button type="primary" icon="el-icon-edit"  round>修改手机号</el-button>-->
       </el-descriptions-item>
       <el-descriptions-item>
         <template slot="label">
           <i class="el-icon-location-outline"></i>
-          居住地
+          IP属地
         </template>
-        苏州市
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template slot="label">
-          <i class="el-icon-tickets"></i>
-          备注
-        </template>
-        <el-tag size="small">学校</el-tag>
+        <el-tag effect="light">{{ ipJson.country }} ·
+          {{ ipJson.province }} ·
+          {{ ipJson.city }} ·
+          {{ ipJson.area }}
+        </el-tag>
+
+
       </el-descriptions-item>
       <el-descriptions-item>
         <template slot="label">
@@ -61,6 +76,7 @@
           联系地址
         </template>
         江苏省苏州市吴中区吴中大道 1188 号
+        <el-tag size="small">学校</el-tag>
       </el-descriptions-item>
       <el-descriptions-item>
         <template slot="label">
@@ -119,6 +135,15 @@ export default {
       console.log(res)
       this.userForm = res.data
       console.log(this.userForm)
+    });
+    //获取ip属地
+    this.request.get("/ip/ip-address").then(res => {
+      console.log(res)
+      this.ip = res.data
+    });
+    this.request.get("https://ip.useragentinfo.com/json").then(res => {
+      console.log(res)
+      this.ipJson = res
     })
   },
   name: "Main",
@@ -157,6 +182,9 @@ export default {
         newPass1: '',
         newPass2: ''
       },
+      ip: '',
+      ipJson: '',
+
       // rules:{
       //   newPass1:[
       //     {
@@ -197,7 +225,7 @@ export default {
       let role = this.userForm.role;
       let createTime = this.userForm.createTime;
       let updateTime = this.userForm.updateTime;
-      this.request.post(this.$lc+"userController/updateUser", {
+      this.request.post(this.$lc + "userController/updateUser", {
         userId, account, username, password, phone, isDel, role, createTime, updateTime
       }).then(res => {
         for (let resKey in res) {

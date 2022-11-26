@@ -97,7 +97,9 @@
             <span class="total-price">{{ getTotalPrice }}元</span>
           </span>
           <router-link :to="getCheckNum > 0 ? '/confirmOrder' : ''">
-            <div :class="getCheckNum > 0 ? 'btn-primary' : 'btn-primary-disabled'">去结算</div>
+            <el-tooltip :disabled="getCheckNum === 0" content="请选择需要结算的商品">
+                <div :class="getCheckNum > 0 ? 'btn-primary' : 'btn-primary-disabled'">去结算</div>
+            </el-tooltip>
           </router-link>
         </div>
       </div>
