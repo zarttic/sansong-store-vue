@@ -16,8 +16,9 @@
           <i class="el-icon-user"></i>
           昵称
         </template>
-        {{ userForm.username }}
-        <el-button type="primary" icon="el-icon-edit" @click="usernameChange = true" round></el-button>
+
+        <el-link icon="el-icon-edit"  @click="usernameChange = true">{{ userForm.username }}</el-link>
+<!--        <el-button type="primary" icon="el-icon-edit" round></el-button>-->
       </el-descriptions-item>
 
 
@@ -26,7 +27,8 @@
           <i class="el-icon-lock"></i>
           密码
         </template>
-        <el-button type="primary" icon="el-icon-edit" @click="passwordChange = true" round>修改密码</el-button>
+        <el-link icon="el-icon-edit"  @click="passwordChange = true">修改密码</el-link>
+<!--        <el-button type="primary" icon="el-icon-edit"  round>修改密码</el-button>-->
       </el-descriptions-item>
 
 
@@ -35,8 +37,9 @@
           <i class="el-icon-mobile-phone"></i>
           手机号
         </template>
-        {{ userForm.phone }}
-        <el-button type="primary" icon="el-icon-edit" @click="phoneChange = true" round>修改手机号</el-button>
+
+        <el-link icon="el-icon-edit"  @click="phoneChange = true">{{ userForm.phone }}</el-link>
+<!--        <el-button type="primary" icon="el-icon-edit"  round>修改手机号</el-button>-->
       </el-descriptions-item>
       <el-descriptions-item>
         <template slot="label">
@@ -75,7 +78,7 @@
       </el-descriptions-item>
     </el-descriptions>
     <!--    username修改-->
-    <el-dialog :visible.sync="usernameChange" title="用户名称修改" center>
+    <el-dialog :visible.sync="usernameChange" title="用户名称修改" center width="50vh">
       <el-input v-model="userForm.username"></el-input>
       <div slot="footer" class="dialog-footer">
         <el-button @click="usernameChange = false" round>取 消</el-button>
@@ -83,7 +86,7 @@
       </div>
     </el-dialog>
     <!--    密码修改-->
-    <el-dialog :visible.sync="passwordChange" title="密码修改">
+    <el-dialog :visible.sync="passwordChange" title="密码修改" width="50vh">
       <el-input v-model="passChange.oldPass" placeholder="旧密码" prefix-icon="el-icon-lock"
                 oninput="value = userForm.password" show-password></el-input>
       <el-input v-model="passChange.newPass1" placeholder="新密码" prefix-icon="el-icon-lock" show-password></el-input>
@@ -96,7 +99,7 @@
     </el-dialog>
 
     <!--    手机号修改-->
-    <el-dialog :visible.sync="phoneChange" title="手机号修改" center >
+    <el-dialog :visible.sync="phoneChange" title="手机号修改" center width="50vh">
       <el-input v-model="userForm.phone" prefix-icon="el-icon-mobile-phone"></el-input>
       <div slot="footer" class="dialog-footer">
         <el-button @click="phoneChange = false" round>取 消</el-button>
