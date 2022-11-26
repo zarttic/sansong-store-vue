@@ -4,7 +4,7 @@
       <el-submenu index="1">
         <template slot="title"><i class="el-icon-user"></i>用户信息</template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">用户详情</el-menu-item>
+          <el-menu-item index="/Userinfo"  @click="jump('/Userinfo')">用户详情</el-menu-item>
 <!--          <el-menu-item index="1-2" onclick="javascript:openUpdateModal();">信息修改</el-menu-item>-->
         </el-menu-item-group>
       </el-submenu>
@@ -12,8 +12,9 @@
         <template slot="title"><i class="el-icon-shopping-cart-1"></i>收货地址</template>
         <el-menu-item-group>
           <template slot="title"></template>
-          <el-menu-item index="2-1">我的收获地址</el-menu-item>
-          <el-menu-item index="2-2">添加收获地址</el-menu-item>
+          <el-menu-item index="/location" @click="jump('/location')">
+            我的收货地址
+          </el-menu-item>
         </el-menu-item-group>
         </el-submenu>
 <!--      <el-submenu index="3">-->
@@ -37,7 +38,12 @@
 
 <script>
 export default {
-  name: "Aside"
+  name: "Aside",
+  methods:{
+    jump(url){
+      this.$router.push(url);
+    }
+  }
 }
 </script>
 
