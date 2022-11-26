@@ -35,7 +35,7 @@ export default {
   activated() {
     // 获取收藏数据
     this.request
-      .get(this.$lc+"collectController/getCollects", {
+      .get("collectController/getCollects", {
         params:{
           userId: this.$store.getters.getUserId
         }

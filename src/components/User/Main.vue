@@ -112,7 +112,7 @@
 export default {
   mounted() {
     this.request
-        .get(this.$lc +"sysController/info").then(res => {
+        .get("sysController/info").then(res => {
       console.log(res)
       this.userForm = res.data
       console.log(this.userForm)

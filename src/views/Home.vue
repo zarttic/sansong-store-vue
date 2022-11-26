@@ -6,7 +6,7 @@
     <!-- 轮播图 -->
     <div class="swiper-box" >
       <el-carousel :height="carouselHigh + 'px'" type="card">
-        <el-carousel-item v-for="item in carousel" :key="item.carousel_id"  >
+        <el-carousel-item v-for="item in carousel" :key="item.carouselId"  >
           <img  :src="require('../../'+item.imgpath)" :alt="item.describes" />
         </el-carousel-item>
       </el-carousel>
