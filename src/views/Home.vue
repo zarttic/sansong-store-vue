@@ -181,19 +181,19 @@ export default {
     this.getPromo("电视机", "miTvList",1);
     this.getPromo("保护套", "protectingShellList",1);
     this.getPromo("充电器", "chargerList",1);
-    this.getPromo(
-      ["电视机", "空调", "洗衣机"],
-      "applianceList",
-
-      "/productController/getHotProduct",
-
-    );
-    this.getPromo(
-      ["保护套", "保护膜", "充电器", "充电宝"],
-      "accessoryList",
-        2,
-      "/productController/getHotProduct"
-    );
+    // this.getPromo(
+    //   ["电视机", "空调", "洗衣机"],
+    //   "applianceList",
+    //
+    //   "/productController/getHotProduct",
+    //
+    // );
+    // this.getPromo(
+    //   ["保护套", "保护膜", "充电器", "充电宝"],
+    //   "accessoryList",
+    //     2,
+    //   "/productController/getHotProduct"
+    // );
   },
   methods: {
 
