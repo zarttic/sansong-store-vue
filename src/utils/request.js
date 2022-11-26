@@ -2,8 +2,8 @@ import axios from 'axios'
 import router from "@/router";
 
 const request = axios.create({
-    // baseURL: 'http://localhost:9001',
-    baseURL: 'http://26a213ff.r3.vip.cpolar.cn/',
+    baseURL: 'http://localhost:9001',
+    // baseURL: 'http://26a213ff.r3.vip.cpolar.cn/',
     timeout: 5000
 })
 
