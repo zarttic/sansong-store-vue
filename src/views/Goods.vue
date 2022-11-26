@@ -25,7 +25,7 @@
             :key="item.categoryId"
             :label="item.categoryName"
             :name="''+item.categoryId"
-          />
+           />
         </el-tabs>
       </div>
     </div>
@@ -164,13 +164,7 @@ export default {
       this.request
         .get("/categoryController/getCategories", {})
         .then(res => {
-          const val = {
-            category_id: 0,
-            category_name: "全部"
-          };
-          const cate = res.data;
-          cate.unshift(val);
-          this.categoryList = cate;
+          this.categoryList = res.data;
         })
         .catch(err => {
           return Promise.reject(err);
