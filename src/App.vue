@@ -163,6 +163,10 @@ export default {
             if (res.code === 200) {
               // 001 为成功, 更新vuex购物车状态
               console.log("更新vuex购物车状态")
+              for(let i=0;i<res.data.length;i++){
+                this.$set(res.data[i],"check",false)
+              }
+              console.log(res.data)
               this.setShoppingCart(res.data);
             } else {
               // 提示失败信息
