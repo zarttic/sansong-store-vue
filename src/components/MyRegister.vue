@@ -46,36 +46,21 @@ export default {
   name: "MyRegister",
   props: ["register"],
   data() {
-    // 用户名的校验方法
+    // 账户的校验方法
     let validateName = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入用户名"));
       }
-      // 用户名以字母开头,长度在5-16之间,允许字母数字下划线  !后续修改校验长度
-      // const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{1,15}$/;
-
-        // this.request
-        //   .post("http://10.132.207.67:9001/sysController/register", {
-        //     account: this.RegisterUser.account,
-        //     password : this.RegisterUser.password,
-        //
-        //   })
-        //   .then(res => {
-        //     return callback(new Error(res.data.msg));
-        //     // “001”代表用户名不存在，可以注册
-        //     // if (res.data.code !== "201") {
-        //     //   this.$refs.ruleForm.validateField("checkPass");
-        //     //   return callback();
-        //     // } else {
-        //     //   return callback(new Error(res.data.msg));
-        //     // }
-        //   })
-        //   .catch(err => {
-        //     return Promise.reject(err);
-        //   });
-      // } else {
-      //   return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
-      // }
+      // 账户名account以字母开头,长度在4-16之间,允许字母数字下划线  !后续修改校验长度
+     const accountRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
+      if(accountRule.test(value)){
+        this.$refs.ruleForm.validateField("checkPass");
+        return callback();
+      }else{
+        return callback(
+            new Error("字母开头,长度5-16之间,允许字母数字下划线")
+        )
+      }
     };
     // 密码的校验方法
     let validatePass = (rule, value, callback) => {
@@ -83,13 +68,13 @@ export default {
         return callback(new Error("请输入密码"));
       }
       // 密码以字母开头,长度在6-18之间,允许字母数字和下划线  !后续修改校验长度
-      const passwordRule = /^[a-zA-Z]\w{1,17}$/;
+      const passwordRule = /^[a-zA-Z]\w{4,17}$/;
       if (passwordRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {
         return callback(
-          new Error("字母开头,长度6-18之间,允许字母数字和下划线")
+          new Error("字母开头,长度5-18之间,允许字母数字和下划线")
         );
       }
     };
@@ -138,39 +123,38 @@ export default {
   },
   methods: {
     Register() {
-      console.log(this.RegisterUser.account+' '+this.RegisterUser.password);
-      this.request
-          .post(this.$lc +"sysController/register", {
-            account: this.RegisterUser.account,
-            password: this.RegisterUser.password,
+      // 通过element自定义表单校验规则，校验用户输入的用户信息
+      this.$refs["ruleForm"].validate(valid => {
+        //如果通过校验开始注册
+        if (valid) {
+          this.request
+              .post(this.$lc +"sysController/register", {
+                account: this.RegisterUser.account,
+                password: this.RegisterUser.password,
 
-          })
-          .then(res => {
-            console.log(res)
-            console.log(res.data.code)
-            // “001”代表注册成功，其他的均为失败
-            if (res.data.code === 200) {
-              // 隐藏注册组件
-              this.isRegister = false;
-              // 弹出通知框提示注册成功信息
-              this.notifySucceed(res.data.message);
-            } else {
-              // 弹出通知框提示注册失败信息
-              this.notifyError(res.data.message);
-            }
-          })
-          .catch(err => {
-            return Promise.reject(err);
-          });
-      // // 通过element自定义表单校验规则，校验用户输入的用户信息
-      // this.$refs["ruleForm"].validate(valid => {
-      //   //如果通过校验开始注册
-      //   if (valid) {
-      //
-      //   } else {
-      //     return false;
-      //   }
-      // });
+              })
+              .then(res => {
+                // “200”代表注册成功，其他的均为失败
+                if (res.code === 200) {
+                  // 隐藏注册组件
+                  this.isRegister = false;
+                  // 弹出通知框提示注册成功信息
+                  this.notifySucceed(res.message);
+                } else {
+                  // 弹出通知框提示注册失败信息
+                  this.notifyError(res.message);
+                }
+              })
+              .catch(err => {
+                return Promise.reject(err);
+              });
+        } else {
+          this.notifyError("校验失败,请输入合法账户和密码！")
+          return false;
+        }
+      });
+
+
     }
   }
 };

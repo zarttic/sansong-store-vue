@@ -15,10 +15,11 @@
         </el-form-item>
         验证码
         <el-form-item >
-          <el-image
-              style="position: absolute; width: 60px; height: 40px; "
-              :src="url" >
-          </el-image>
+            <el-image
+                style="position: absolute; width: 60px; height: 40px; "
+                :src="url"
+                @click="url='http://localhost:9001/sysController/getVerifyCodeImage'+'?time='+Math.random()">
+            </el-image>
           <el-input prefix-icon="el-icon-lock" type="text" v-model="LoginAccount.verifyCode" style="margin-left: 60px; height: 40px; width: 190px;">
           </el-input>
         </el-form-item>
@@ -42,7 +43,7 @@ export default {
         return callback(new Error("请输入用户名"));
       }
       // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
-      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{1,15}$/;
+      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
       if (userNameRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
@@ -55,14 +56,14 @@ export default {
       if (value === "") {
         return callback(new Error("请输入密码"));
       }
-      // 密码以字母开头,长度在6-18之间,允许字母数字和下划线
-      const passwordRule = /^[a-zA-Z]\w{1,17}$/;
+      // 密码以字母开头,长度在5-18之间,允许字母数字和下划线
+      const passwordRule = /^[a-zA-Z]\w{4,17}$/;
       if (passwordRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {
         return callback(
-          new Error("字母开头,长度6-18之间,允许字母数字和下划线")
+          new Error("字母开头,长度5-18之间,允许字母数字和下划线")
         );
       }
     };
@@ -72,7 +73,7 @@ export default {
         password: "",
         verifyCode: "",
       },
-      url: this.$lc+"sysController/getVerifyCodeImage",
+      url: "http://localhost:9001/sysController/getVerifyCodeImage",
 
 
 
@@ -109,14 +110,12 @@ export default {
               verifyCode: this.LoginAccount.verifyCode
             })
             .then(res => {
-              console.log(res.code);
-              // “001”代表登录成功，其他的均为失败
+              // 200代表登录成功，其他的均为失败
               if (res.code === 200) {
                 // 隐藏登录组件
                 this.isLogin = false;
                 //保存token
                 localStorage.setItem("token",res.data);
-                console.log(localStorage.getItem("token"));
                 //请求一个info
                 this.request
                     .get(this.$lc +"sysController/info",)
@@ -130,13 +129,13 @@ export default {
                     })
 
                 // 弹出通知框提示登录成功信息
-                this.notifySucceed(res.msg);
-                // location.reload();
+                this.notifySucceed(res.message);
+                location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
                 // 弹出通知框提示登录失败信息
-                this.notifyError(res.msg);
+                this.notifyError(res.message);
               }
             })
             .catch(err => {
