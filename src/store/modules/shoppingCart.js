@@ -57,6 +57,7 @@ export default {
           checkGoods.push(temp);
         }
       }
+      console.log("获取勾选的商品信息",checkGoods)
       return checkGoods;
     },
     getCheckNum (state) {

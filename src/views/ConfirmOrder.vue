@@ -46,11 +46,11 @@
         <div class="goods-list">
           <ul>
             <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="$lc + item.productImg" />
-              <span class="pro-name">{{item.productName}}</span>
-              <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
+              <img :src="$lc + item.product.productPicture" />
+              <span class="pro-name">{{item.product.productName}}</span>
+              <span class="pro-price">{{item.product.productPrice}}元 x {{item.num}}</span>
               <span class="pro-status"></span>
-              <span class="pro-total">{{item.price * item.num}}元</span>
+              <span class="pro-total">{{item.product.productSellingPrice * item.num}}元</span>
             </li>
           </ul>
         </div>
@@ -160,16 +160,21 @@ export default {
   methods: {
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
+      let products = this.getCheckGoods;
+      let par=[];
+      for(let i=0;i<this.getCheckGoods.length;i++) par.push("price: "+products.product.productSellingPrice+","+"num: "+products.num);
+      let str=JSON.stringify(par);
       this.request
         .get("/ordersController/addOrders", {
           params:{
-            userId: this.$store.getters.getUserId,
+            userId: localStorage.getItem("userId"),
+            order: str
           }
-          // products: this.getCheckGoods
+           //products: this.getCheckGoods
         })
         .then(res => {
           console.log(res)
-          let products = this.getCheckGoods;
+
           switch (res.code) {
             // “001”代表结算成功
             case 200:
