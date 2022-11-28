@@ -164,6 +164,7 @@ export default {
       console.log("key: " + key);
       // 更新vuex中购物车商品是否勾选的状态
       this.updateShoppingCart({key: key, prop: "check", val: val});
+      this.load;
     },
     // 向后端发起删除购物车的数据库信息请求 TODO
     deleteItem(e, id, productId) {

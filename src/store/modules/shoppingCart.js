@@ -4,7 +4,8 @@
 
 export default {
   state: {
-    shoppingCart: []
+    shoppingCart: [],
+    maxNum:100,
     // shoppingCart结构
     /*
     shoppingCart = {
@@ -96,6 +97,10 @@ export default {
       state.shoppingCart.unshift(data);
     },
     updateShoppingCart (state, payload) {
+      console.log("下面是更新")
+      console.log(state)
+      console.log(payload)
+      console.log(payload.prop)
       // console.log("up_shoppingCart")
       // console.log(state.shoppingCart)
       // console.log("upd_state")
@@ -105,7 +110,7 @@ export default {
       // 更新购物车
       // 可更新商品数量和是否勾选
       // 用于购物车点击勾选及加减商品数量
-      if (payload.prop === "num") {
+      if (payload.prop == "num") {
         // 判断效果的商品数量是否大于限购数量或小于1
         if (state.shoppingCart[payload.key].maxNum < payload.val) {
           return;
@@ -116,6 +121,8 @@ export default {
       }
       // 根据商品在购物车的数组的索引和属性更改
       state.shoppingCart[payload.key][payload.prop] = payload.val;
+      // this.$set(state.shoppingCart)
+      // this.$set(state.shoppingCart[payload.key][payload.prop],payload.val)
       console.log("down_shoppingCart")
       console.log(state.shoppingCart)
     },
@@ -124,8 +131,8 @@ export default {
       // 用于在商品详情页点击添加购物车,后台返回002，“该商品已在购物车，数量 +1”，更新vuex的商品数量
       for (let i = 0; i < state.shoppingCart.length; i++) {
         const temp = state.shoppingCart[i];
-        if (temp.product.productId === productID) {
-          if (temp.num < temp.product.productNum) {
+        if (temp.product.productId == productID) {
+          if (temp.num < temp.maxNum) {
             temp.num++;
           }
         }

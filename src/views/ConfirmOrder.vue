@@ -46,7 +46,7 @@
         <div class="goods-list">
           <ul>
             <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="$lc + item.productImg" />
+              <img :src="item.productImg" />
               <span class="pro-name">{{item.productName}}</span>
               <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
               <span class="pro-status"></span>
@@ -170,6 +170,7 @@ export default {
         .then(res => {
           console.log(res)
           let products = this.getCheckGoods;
+          console.log(products)
           switch (res.code) {
             // “001”代表结算成功
             case 200:

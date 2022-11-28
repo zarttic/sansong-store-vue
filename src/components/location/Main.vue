@@ -2,7 +2,7 @@
   <el-main>
     <el-table
         :data="tableData"
-        style="width: 100%">
+        style="width: 100%" v-loading="loading">
       <el-table-column
           label="收货人姓名"
           width="180">
@@ -92,13 +92,15 @@ export default {
       }
     }).then(res => {
       this.tableData = res.data
+      this.loading = false
     })
   },
   data() {
     return {
       tableData: [],
       form: [],
-      dialogShow: false
+      dialogShow: false,
+      loading: true,
     }
   },
   methods: {
