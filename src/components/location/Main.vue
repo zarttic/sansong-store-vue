@@ -60,7 +60,7 @@
     <!--        点击事件框-->
     <el-dialog title="用户信息" :visible.sync="dialogShow" width="30%">
       <el-form label-width="80px" size="small">
-        <el-form-item label="用户名">
+        <el-form-item label="收货人姓名">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话">

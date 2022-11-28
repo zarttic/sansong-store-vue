@@ -26,14 +26,17 @@
               :class="item.id === confirmAddress ? 'in-section' : ''"
               v-for="item in address"
               :key="item.id"
-            >
-              <h2>{{item.name}}</h2>
+             @click="confirmAddress = item.id">
+
+              <h2>{{item.username}}</h2>
               <p class="phone">{{item.phone}}</p>
-              <p class="address">{{item.address}}</p>
+              <p class="address">{{item.location}}</p>
+              <el-tag>{{item.tabs}}</el-tag>
             </li>
             <li class="add-address">
-              <i class="el-icon-circle-plus-outline"></i>
-              <p>添加新地址</p>
+              <div style="margin:  0 auto; display: table">
+                <el-link style="font-size: 20px; margin-top: 50px;" icon="el-icon-top-right" @click="jump('/location')">去管理地址</el-link>
+              </div>
             </li>
           </ul>
         </div>
@@ -46,11 +49,11 @@
         <div class="goods-list">
           <ul>
             <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="item.productImg" />
-              <span class="pro-name">{{item.productName}}</span>
-              <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
+              <img :src="$lc + item.product.productPicture" />
+              <span class="pro-name">{{item.product.productName}}</span>
+              <span class="pro-price">{{item.product.productPrice}}元 x {{item.num}}</span>
               <span class="pro-status"></span>
-              <span class="pro-total">{{item.price * item.num}}元</span>
+              <span class="pro-total">{{item.product.productSellingPrice * item.num}}元</span>
             </li>
           </ul>
         </div>
@@ -124,26 +127,25 @@
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 export default {
+  mounted() {
+    this.request.get('/LocationController/getLocationById',{
+      params:{
+        userId: this.$store.getters.getUserId,
+      }
+    }).then(res =>{
+      console.log("地址")
+      console.log(res)
+       this.address = res.data;
+      this.confirmAddress = this.address[0].id
+    })
+  },
   name: "",
   data() {
     return {
       // 虚拟数据
-      confirmAddress: 1, // 选择的地址id
+      confirmAddress: 0, // 选择的地址id
       // 地址列表
-      address: [
-        {
-          id: 1,
-          name: "陈同学",
-          phone: "100861001010000",
-          address: "广东 广州市 白云区 ***"
-        },
-        {
-          id: 2,
-          name: "陈同学",
-          phone: "100861001010000",
-          address: "广东 广州市 白云区 ***"
-        }
-      ]
+      address: []
     };
   },
   created() {
@@ -159,13 +161,26 @@ export default {
   },
   methods: {
     ...mapActions(["deleteShoppingCart"]),
+    jump(url){
+      this.$router.push(url);
+    },
     addOrder() {
+      console.log("check goods")
+      console.log(this.getCheckGoods)
+      console.log(this.getCheckGoods.length)
+      let productIds='';
+      for(let i=0;i < this.getCheckGoods.length;i++) {
+        productIds += this.getCheckGoods[i].product.productId
+        if (i != this.getCheckGoods.length - 1)productIds += ','
+      }
+      console.log(productIds)
       this.request
         .get("/ordersController/addOrders", {
           params:{
             userId: this.$store.getters.getUserId,
-          }
-          // products: this.getCheckGoods
+            locationId: this.confirmAddress,
+            productIds
+          },
         })
         .then(res => {
           console.log(res)
@@ -186,7 +201,7 @@ export default {
               break;
             default:
               // 提示失败信息
-              this.notifyError(res.data.msg);
+              this.notifyError(res.message);
           }
         })
         .catch(err => {
