@@ -145,7 +145,8 @@ export default {
       // 虚拟数据
       confirmAddress: 0, // 选择的地址id
       // 地址列表
-      address: []
+      address: [],
+      total: 0
     };
   },
   created() {
@@ -174,6 +175,7 @@ export default {
         if (i != this.getCheckGoods.length - 1)productIds += ','
       }
       console.log(productIds)
+      this.total = this.getTotalPrice
       this.request
         .get("/ordersController/addOrders", {
           params:{
@@ -194,6 +196,7 @@ export default {
                 // 删除已经结算的购物车商品
                 this.deleteShoppingCart(temp.id);
               }
+              window.open('http://localhost:9001/alipay/pay?&subject=三松商城订单'+"&traceNo="+res.data+"&totalAmount="+this.total)
               // 提示结算结果
               this.notifySucceed(res.message);
               // 跳转我的订单页面

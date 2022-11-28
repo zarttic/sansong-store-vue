@@ -41,12 +41,12 @@
             </div>
             <div class="pro-name">
               <router-link
-                :to="{ path: '/goods/details', query: {productID:product.orders.productId} }"
-              >{{product.productName || "未知"}}</router-link>
+                :to="{ path: '/goods/details', query: {productID:product.orders.productId} }">{{product.productName || "未知"}}</router-link>
             </div>
             <div class="pro-price">{{product.orders.productPrice}}元</div>
             <div class="pro-num">{{product.orders.productNum}}</div>
             <div class="pro-total pro-total-in">{{product.orders.productPrice * product.orders.productNum}}元</div>
+            <div class="pro-price">订单状态  {{product.orders.state == 0 ? "未付款":"已付款"}}</div>
           </li>
         </ul>
         <div class="order-bar">
@@ -59,8 +59,9 @@
           <div class="order-bar-right">
             <span>
               <span class="total-price-title">合计：</span>
-              <span class="total-price">{{total[index].totalPrice}}元</span>
+              <span class="total-price" >{{total[index].totalPrice}}元</span>
             </span>
+
           </div>
           <!-- 订单列表END -->
         </div>
@@ -96,7 +97,8 @@ export default {
         }
       })
       .then(res => {
-        console.log(res)
+        console.log("订单信息")
+        console.log(res.data)
         if (res.code === 200) {
           this.orders = res.data;
         } else {
