@@ -15,10 +15,11 @@
         </el-form-item>
         验证码
         <el-form-item >
-          <el-image
-              style="position: absolute; width: 60px; height: 40px; "
-              :src="url" >
-          </el-image>
+            <el-image
+                style="position: absolute; width: 60px; height: 40px; "
+                :src="url"
+                @click="url='http://localhost:9001/sysController/getVerifyCodeImage'+'?time='+Math.random()">
+            </el-image>
           <el-input prefix-icon="el-icon-lock" type="text" v-model="LoginAccount.verifyCode" style="margin-left: 60px; height: 40px; width: 190px;">
           </el-input>
         </el-form-item>
@@ -72,7 +73,7 @@ export default {
         password: "",
         verifyCode: "",
       },
-      url: this.$lc+"sysController/getVerifyCodeImage",
+      url: "http://localhost:9001/sysController/getVerifyCodeImage",
 
 
 
