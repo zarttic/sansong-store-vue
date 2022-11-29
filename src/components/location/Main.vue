@@ -106,7 +106,8 @@ export default {
   methods: {
     //新增地址
     addLocation() {
-      this.dialogShow = true
+      this.dialogShow = true;
+      this.form = [];
     },
     //编辑打开对话框
     handleEdit(index, row) {
@@ -125,8 +126,9 @@ export default {
       }).then(res => {
         console.log(res)
         if (res.code == 200){
-          this.$notify.success(res.data.message)
+          this.$notify.success(res.message)
         }
+        this.dialogShow = false;
 
 
       })
