@@ -70,6 +70,11 @@ const routes = [
         component: () => import('@/views/Userinfo.vue'),
     },
     {
+        path: '/Admin',
+        name: 'Admin',
+        component: () => import('@/views/Admin.vue'),
+    },
+    {
         path: '/location',
         name: 'location',
         component: () => import('@/views/location.vue'),

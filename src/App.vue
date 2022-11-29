@@ -8,6 +8,7 @@
       <div class="topbar">
         <div class="nav">
           <ul>
+            <router-link to="/Admin">管理员</router-link>
             <li v-if="!this.$store.getters.getAccount">
               <el-button type="text" @click="login">登录</el-button>
               <span class="sep">|</span>
