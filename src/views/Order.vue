@@ -23,16 +23,15 @@
             <div class="order-id">订单编号: {{item[0].orders.orderId}}</div>
             <div class="order-time">订单时间: {{item[0].orders.orderTime | dateFormat}}</div>
 
-            <div v-if="item[0].orders.delay != 0">
-              <div  class="order-id" style="padding-left: 10px">
+            <div v-if="item[0].orders.delay != 0" style="width: 0px;position: relative;margin-left: 250px">
+              <div  class="order-id" style="padding-left: 10px;position: absolute">
                <el-tooltip content="点击去支付">
                  <el-link>
                    <el-tag type="warning" @click="toPay(item[0].orders.orderId,index)">订单未支付,点我去支付！</el-tag>
                  </el-link>
                </el-tooltip>
               </div>
-              <el-statistic  :value="times[index]" time-indices title="订单结束倒计时">
-              </el-statistic>
+              <div style="position: absolute;width: 128px;height: 61px;margin-left: 300px;padding: 0 0;"><el-statistic  :value="times[index]" time-indices title="订单结束倒计时"></el-statistic></div>
             </div>
             <div v-else-if="item[0].orders.state == 1" class="order-id" style="padding-left: 10px">
                <el-tag>订单已完成</el-tag>
@@ -198,7 +197,7 @@ export default {
 }
 .order .order-header .order-header-content {
   width: 1225px;
-  margin: 0 auto;
+  margin: 0 0;
 }
 .order .order-header p {
   font-size: 28px;
@@ -237,6 +236,8 @@ export default {
 }
 
 .order .content ul .header {
+  text-align: left;
+  display: block;
   height: 85px;
   padding-right: 26px;
   color: #424242;
