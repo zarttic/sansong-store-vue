@@ -22,6 +22,25 @@
           <li class="order-info">
             <div class="order-id">订单编号: {{item[0].orders.orderId}}</div>
             <div class="order-time">订单时间: {{item[0].orders.orderTime | dateFormat}}</div>
+
+            <div v-if="item[0].orders.delay != 0">
+              <div  class="order-id" style="padding-left: 10px">
+               <el-tooltip content="点击去支付">
+                 <el-link>
+                   <el-tag type="warning" @click="toPay(item[0].orders.orderId,index)">订单未支付,点我去支付！</el-tag>
+                 </el-link>
+               </el-tooltip>
+              </div>
+              <el-statistic  :value="times[index]" time-indices title="订单结束倒计时">
+              </el-statistic>
+            </div>
+            <div v-else-if="item[0].orders.state == 1" class="order-id" style="padding-left: 10px">
+               <el-tag>订单已完成</el-tag>
+            </div>
+            <div v-else-if="item[0].orders.state == -1" class="order-id" style="padding-left: 10px">
+              <el-tag type="danger">订单已取消</el-tag>
+            </div>
+
           </li>
           <li class="header">
             <div class="pro-img"></div>
@@ -35,6 +54,7 @@
           <!-- 订单列表 -->
           <li class="product-list" v-for="(product,i) in item" :key="i">
             <div class="pro-img">
+
               <router-link :to="{ path: '/goods/details', query: {productID:product.orders.productId} }">
                 <img :src="$lc + product.productPic" />
               </router-link>
@@ -46,7 +66,8 @@
             <div class="pro-price">{{product.orders.productPrice}}元</div>
             <div class="pro-num">{{product.orders.productNum}}</div>
             <div class="pro-total pro-total-in">{{product.orders.productPrice * product.orders.productNum}}元</div>
-            <div class="pro-price">订单状态  {{product.orders.state == 0 ? "未付款":"已付款"}}</div>
+
+
           </li>
         </ul>
         <div class="order-bar">
@@ -82,10 +103,33 @@
 </template>
 <script>
 export default {
+  methods:{
+    toPay(orderId,index){
+      if (this.times[index] < Date.now()){
+
+        this.request.get('/ordersController/setExpired',{
+          params:{
+            orderId
+          }
+        }).then(res =>{
+          if (res.code == 200){
+            this.notifyError("订单已失效");
+          }
+        })
+        this.notifyError("请刷新页面");
+
+      }
+      console.log(orderId)
+      console.log(this.total[index])
+      window.open('http://localhost:9001/alipay/pay?&subject=三松商城订单'+"&traceNo="+orderId+"&totalAmount="+this.total[index].totalPrice)
+    }
+  },
   data() {
     return {
       orders: [], // 订单列表
-      total: [] // 每个订单的商品数量及总价列表
+      total: [], // 每个订单的商品数量及总价列表
+      times: [],
+      // times: Date.now() + 1000 * 60 * 60 * 8,
     };
   },
   activated() {
@@ -101,6 +145,14 @@ export default {
         console.log(res.data)
         if (res.code === 200) {
           this.orders = res.data;
+          for (let i = 0; i < this.orders.length; i++) {
+            console.log("调试信息")
+            console.log(this.orders[i][0].orders.delay)
+            if (this.orders[i][0].orders.delay !== 0) {
+              this.times[i] = this.orders[i][0].orders.delay * 1000 + Date.now();
+            }
+          }
+          console.log(this.times)
         } else {
           this.notifyError(res.message);
         }
