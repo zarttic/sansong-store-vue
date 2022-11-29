@@ -103,8 +103,9 @@ export default {
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
         if (valid) {
+          console.log("通过验证")
           this.request
-            .post(this.$lc +"sysController/login", {
+            .post("sysController/login", {
               account: this.LoginAccount.account,
               password: this.LoginAccount.password,
               verifyCode: this.LoginAccount.verifyCode
@@ -118,10 +119,11 @@ export default {
                 localStorage.setItem("token",res.data);
                 //请求一个info
                 this.request
-                    .get(this.$lc +"sysController/info",)
+                    .get("sysController/info",)
                     .then(function (res){
                       // 登录信息存到本地
                       let account1 = JSON.stringify(res.data.account);
+                      console.log(account1)
                       localStorage.setItem("account",account1);
                       // 登录信息存到vuex
                       let id1 = JSON.parse(res.data.userId);
@@ -142,6 +144,7 @@ export default {
               return Promise.reject(err);
             });
         } else {
+          this.$notify.error("未通过valid验证")
           return false;
         }
       });

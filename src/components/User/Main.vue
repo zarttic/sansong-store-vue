@@ -124,6 +124,7 @@ export default {
   mounted() {
     this.request
         .get("sysController/info").then(res => {
+      console.log("请求登录信息")
       console.log(res)
       this.userForm = res.data
       console.log(this.userForm)

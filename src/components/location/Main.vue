@@ -33,20 +33,19 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <!--          <el-button-->
-          <!--              size="mini"-->
-          <!--              @click="handleEdit(scope.$index, scope.row)">保存编辑</el-button>-->
+            <el-link icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-link>
 
-          <el-link icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-link>
+          <el-popover
+              placement="top-start"
+              title="删除地址"
+              width="200"
+              trigger="hover"
+              content="点击删除此地址">
+            <el-link slot="reference" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)"
+                     style="padding-left: 10px">删除
+            </el-link>
+          </el-popover>
 
-          <el-link icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)" style="margin-left: 10px">删除
-          </el-link>
-          <!--          <el-button-->
-          <!--              size="mini"-->
-          <!--              type="danger"-->
-          <!--              @click="handleDelete(scope.$index, scope.row)">-->
-          <!--            -->
-          <!--          </el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -59,7 +58,7 @@
     </div>
     <!--        点击事件框-->
     <el-dialog title="用户信息" :visible.sync="dialogShow" width="30%">
-      <el-form label-width="80px" size="small">
+      <el-form label-width="100px" size="small">
         <el-form-item label="收货人姓名">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
@@ -67,10 +66,18 @@
           <el-input v-model="form.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址">
+          <el-cascader
+              size="large"
+              :options="options"
+              v-model="selectedOptions"
+              @change="handleChange" style="width: 300px">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="详细地址">
           <el-input v-model="form.location" autocomplete="off" type="textarea"></el-input>
         </el-form-item>
         <el-form-item label="标签">
-          <el-input v-model="form.tabs" autocomplete="off" ></el-input>
+          <el-input v-model="form.tabs" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -83,7 +90,10 @@
 
 </template>
 
+
 <script>
+const {regionData, CodeToText} = require('element-china-area-data/dist/app.commonjs')
+
 export default {
   mounted() {
     this.request.get('/LocationController/getLocationById', {
@@ -99,15 +109,21 @@ export default {
     return {
       tableData: [],
       form: [],
-      dialogShow: false,
-      loading: true,
+      dialogShow: false,//修改新增对话框
+      loading: true,//加载动画 加载完成后自动关闭
+      options: regionData,
+      selectedOptions: [],//地址选择器
+      visible: false,//删除框
     }
   },
   methods: {
+    //地址选择器
+    handleChange(value) {
+      console.log(value)
+    },
     //新增地址
     addLocation() {
       this.dialogShow = true;
-      this.form = [];
     },
     //编辑打开对话框
     handleEdit(index, row) {
@@ -116,20 +132,26 @@ export default {
       this.dialogShow = true
     },
     save() {
+      console.log(this.selectedOptions)
+      let str = '';
+      for (let i = 0; i < 3; i++) {
+        str += CodeToText[this.selectedOptions[i]]
+      }
       this.request.post('/LocationController/updateLocation', {
         "id": this.form.id,
-        "userId": this.form.userId,
+        "userId": this.$store.getters.getUserId,
         "username": this.form.username,
         "phone": this.form.phone,
-        "location": this.form.location,
+        "location": str + this.form.location,
         "tabs": this.form.tabs,
       }).then(res => {
         console.log(res)
-        if (res.code == 200){
+        if (res.code == 200) {
           this.$notify.success(res.message)
         }
         this.dialogShow = false;
-
+        //刷新
+        window.location.reload();
 
       })
     },
@@ -142,6 +164,11 @@ export default {
         }
       }).then(res => {
         console.log(res)
+        if (res.code == 200) {
+          this.$notify.success(res.message)
+        }
+        this.visible = false;
+        window.location.reload();
       })
     },
   }
