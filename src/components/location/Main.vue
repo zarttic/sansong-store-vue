@@ -106,8 +106,7 @@ export default {
   methods: {
     //新增地址
     addLocation() {
-      this.dialogShow = true;
-      this.form = [];
+      this.dialogShow = true
     },
     //编辑打开对话框
     handleEdit(index, row) {
@@ -117,20 +116,9 @@ export default {
     },
     save() {
       this.request.post('/LocationController/updateLocation', {
-        "id": this.form.id,
-        "userId": this.form.userId,
-        "username": this.form.username,
-        "phone": this.form.phone,
-        "location": this.form.location,
-        "tabs": this.form.tabs,
+        location: this.form
       }).then(res => {
         console.log(res)
-        if (res.code == 200){
-          this.$notify.success(res.message)
-        }
-        this.dialogShow = false;
-
-
       })
     },
     //删除操作
