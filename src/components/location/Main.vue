@@ -116,9 +116,19 @@ export default {
     },
     save() {
       this.request.post('/LocationController/updateLocation', {
-        location: this.form
+        "id": this.form.id,
+        "userId": this.form.userId,
+        "username": this.form.username,
+        "phone": this.form.phone,
+        "location": this.form.location,
+        "tabs": this.form.tabs,
       }).then(res => {
         console.log(res)
+        if (res.code == 200){
+          this.$notify.success(res.data.message)
+        }
+
+
       })
     },
     //删除操作
