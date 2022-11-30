@@ -10,6 +10,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import request from "@/utils/request";
 
+
 Vue.use(ElementUI);
 
 // 全局函数及变量
@@ -18,6 +19,7 @@ import Global from './Global';
 Vue.use(Global);
 Vue.prototype.request = request
 
+// Vue.prototype.$echarts = echarts
 // 全局拦截器,在进入需要用户权限的页面前校验是否已经登录
 router.beforeResolve((to, from, next) => {
     const loginUser = store.getters.getAccount;

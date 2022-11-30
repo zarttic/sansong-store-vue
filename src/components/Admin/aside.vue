@@ -13,6 +13,10 @@
         <template slot="title"><i class="el-icon-setting"></i>商品管理</template>
         <el-menu-item index="2-1" @click="jump('/Product')">商品信息</el-menu-item>
       </el-submenu>
+      <el-submenu index="3">
+      <template slot="title"><i class="el-icon-setting"></i>商品数据</template>
+      <el-menu-item index="3-1" @click="jump('/dataShow')">商品数据</el-menu-item>
+    </el-submenu>
     </el-menu>
   </el-aside>
 </template>

@@ -80,6 +80,11 @@ const routes = [
         component: () => import('@/views/Product.vue'),
     },
     {
+        path: '/dataShow',
+        name: 'DataShow',
+        component: () => import('@/views/DataShow.vue'),
+    },
+    {
         path: '/location',
         name: 'location',
         component: () => import('@/views/location.vue'),
