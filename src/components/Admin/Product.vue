@@ -56,6 +56,7 @@
           <el-table-column prop="productPrice" label="商品价格"></el-table-column>
           <el-table-column prop="productSellingPrice" label="实际销售价格"></el-table-column>
           <el-table-column prop="productNum" label="商品库存"></el-table-column>
+          <el-table-column prop="productSales" label="销售数量"></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
@@ -105,7 +106,7 @@
         <el-form-item label="商品图片路径">
           <el-input v-model="form.productPicture" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="商品图片路径">
+        <el-form-item label="商品图片预览">
           <el-image
               style="width: 100px; height: 100px"
               :src="form.productPicture">

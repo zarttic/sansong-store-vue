@@ -40,7 +40,7 @@
           </div>
           <div class="pro-img">
             <router-link :to="{ path: '/goods/details', query: {productId:item.product.productId} }">
-              <img :src="$lc +item.product.productPicture"/>
+              <img :src="item.product.productPicture"/>
             </router-link>
           </div>
           <div class="pro-name">
