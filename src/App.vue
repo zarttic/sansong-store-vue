@@ -8,7 +8,7 @@
       <div class="topbar">
         <div class="nav">
           <ul>
-            <router-link to="/Admin">管理员</router-link>
+            <li v-if="isadmin"><router-link to="/Admin">管理员</router-link></li>
             <li v-if="!this.$store.getters.getAccount">
               <el-button type="text" @click="login">登录</el-button>
               <span class="sep">|</span>
@@ -127,12 +127,14 @@ export default {
       search: "", // 搜索条件
       register: false, // 是否显示注册组件
       visible: false, // 是否退出登录
+      isadmin: false
     };
   },
   created() {
     // 获取浏览器localStorage，判断用户是否已经登录
     if (localStorage.getItem("account")) {
       // 如果已经登录，设置vuex登录状态
+      this.isadmin=localStorage.getItem("role")==0?true:false;
       this.setAccount(JSON.parse(localStorage.getItem("account")));
       this.setUserId(JSON.parse(localStorage.getItem("userId")));
     }
@@ -149,7 +151,6 @@ export default {
         this.setShoppingCart([]);
       } else {
         // 用户已经登录,获取该用户的购物车信息
-        console.log(localStorage.getItem("userId"))
         this.request
           .get(this.$lc + "shopcarController/getshopcar", {
             'params':{
@@ -157,17 +158,12 @@ export default {
             }
           })
           .then(res => {
-            res.data.forEach(it =>{
-              console.log(it);
-            })
-
             if (res.code === 200) {
               // 001 为成功, 更新vuex购物车状态
               console.log("更新vuex购物车状态")
               for(let i=0;i<res.data.length;i++){
                 this.$set(res.data[i],"check",false)
               }
-              console.log(res.data)
               this.setShoppingCart(res.data);
             } else {
               // 提示失败信息
@@ -193,6 +189,7 @@ export default {
       // 清空本地登录信息
       localStorage.setItem("account", "");
       localStorage.setItem("id", "");
+      localStorage.setItem("role","1");
       localStorage.setItem("token", "");
       // 清空vuex登录信息
       this.setAccount("");

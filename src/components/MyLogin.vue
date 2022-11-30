@@ -128,11 +128,14 @@ export default {
                       // 登录信息存到vuex
                       let id1 = JSON.parse(res.data.userId);
                       localStorage.setItem("userId",id1);
+
+                      let role1=JSON.parse(res.data.role);
+                      localStorage.setItem("role",role1);
                     })
 
                 // 弹出通知框提示登录成功信息
                 this.notifySucceed(res.message);
-                location.reload();
+               // location.reload();
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
