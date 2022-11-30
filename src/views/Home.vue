@@ -166,11 +166,7 @@ export default {
     this.request
       .get(this.$lc +"carouselController/getPic", {})
       .then(res => {
-        console.log("轮播")
         this.carousel = res.data;
-        this.carousel.forEach(it =>{
-          console.log(it);
-        })
       })
       .catch(err => {
         return Promise.reject(err);

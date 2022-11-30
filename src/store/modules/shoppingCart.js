@@ -21,8 +21,6 @@ export default {
   },
   getters: {
     getShoppingCart (state) {
-      console.log("购物车状态")
-      console.log(state.shoppingCart)
       // 获取购物车状态
       return state.shoppingCart;
     },
@@ -62,8 +60,6 @@ export default {
       return checkGoods;
     },
     getCheckNum (state) {
-      console.log("getCheckNum_state")
-      console.log(state)
       // 获取购物车勾选的商品数量
       let totalNum = 0;
       for (let i = 0; i < state.shoppingCart.length; i++) {
