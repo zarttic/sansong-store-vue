@@ -93,9 +93,9 @@
         <el-form-item label="账号" >
           <el-input v-model="form.account" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input v-model="form.phone" autocomplete="off"></el-input>
-        </el-form-item>
+<!--        <el-form-item label="邮箱">-->
+<!--          <el-input v-model="form.phone" autocomplete="off"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item label="电话">
           <el-input v-model="form.phone" autocomplete="off"></el-input>
         </el-form-item>
