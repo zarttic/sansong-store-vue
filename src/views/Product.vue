@@ -1,16 +1,15 @@
 <template>
   <el-container>
     <Aside></Aside>
-    <Main></Main>
+    <MMain></MMain>
   </el-container>
 </template>
 
-<script>
-import Main from "@/components/Admin/Main";
+<script >
+import MMain from "@/components/Admin/Product"
 import Aside from "@/components/Admin/aside";
 export default {
-  name: "Admin",
-  components: {Aside, Main},
+  components: {Aside,MMain}
 }
 </script>
 
