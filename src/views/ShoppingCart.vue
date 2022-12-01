@@ -3,7 +3,9 @@
  -->
 
 <template>
+
   <div class="shoppingCart">
+<!--    <meta http-equiv="refresh" content="10">-->
     <!-- 购物车头部 -->
     <div class="cart-header">
       <div class="cart-header-content">
@@ -39,13 +41,13 @@
             <el-checkbox :value="item.check" @change="checkChange($event, index)"></el-checkbox>
           </div>
           <div class="pro-img">
-            <router-link :to="{ path: '/goods/details', query: {productId:item.product.productId} }">
+            <router-link :to="{ path: '/goods/details', query: {productID:item.product.productId} }">
               <img :src="item.product.productPicture"/>
             </router-link>
           </div>
           <div class="pro-name">
             <router-link
-                :to="{ path: '/goods/details', query: {productId:item.product.productId} }"
+                :to="{ path: '/goods/details', query: {productID:item.product.productId} }"
             >{{ item.product.productName }}
             </router-link>
           </div>
@@ -121,8 +123,11 @@
 import {mapActions, mapGetters} from "vuex";
 
 export default {
+  inject:['reload'],
   data() {
-    return {};
+    return {
+      isFresh:false,
+    };
   },
   methods: {
     ...mapActions(["updateShoppingCart", "deleteShoppingCart", "checkAll"]),
