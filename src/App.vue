@@ -33,8 +33,8 @@
               <router-link to="/collect">我的收藏</router-link>
             </li>
             <li :class="getNum > 0 ? 'shopCart-full' : 'shopCart'">
-              <router-link to="/shoppingCart">
-                <i class="el-icon-shopping-cart-full"></i> 购物车
+              <router-link to="/shoppingCart" >
+                <i class="el-icon-shopping-cart-full" ></i> 购物车
                 <span class="num">({{getNum}})</span>
               </router-link>
             </li>
@@ -78,7 +78,7 @@
       <!-- 主要区域容器 -->
       <el-main>
         <keep-alive>
-          <router-view></router-view>
+          <router-view v-if="isRouterAlive"> </router-view>
         </keep-alive>
       </el-main>
       <!-- 主要区域容器END -->
@@ -117,12 +117,19 @@ import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 
 export default {
+  provide() { // 注册一个方法
+    return {
+      reload: this.reload
+    }
+  },
   components: {},
   beforeUpdate() {
     this.activeIndex = this.$route.path;
   },
   data() {
     return {
+      //页面刷新
+      isRouterAlive: true,
       activeIndex: "", // 头部导航栏选中的标签
       search: "", // 搜索条件
       register: false, // 是否显示注册组件
@@ -143,6 +150,7 @@ export default {
     ...mapGetters(["getAccount", "getNum","getUserId"])
   },
   watch: {
+
     // 获取vuex的登录状态
     getAccount: function(val) {
       if (val === "") {
@@ -152,7 +160,7 @@ export default {
       } else {
         // 用户已经登录,获取该用户的购物车信息
         this.request
-          .get(this.$lc + "shopcarController/getshopcar", {
+          .get( "shopcarController/getshopcar", {
             'params':{
               userId: localStorage.getItem("userId")
             }
@@ -178,6 +186,12 @@ export default {
   },
   methods: {
     ...mapActions(["setAccount", "setShowLogin", "setShoppingCart","setUserId"]),
+    reload() { //刷新
+      this.isRouterAlive = false
+      this.$nextTick(function() {
+        this.isRouterAlive = true
+      })
+    },
     login() {
       console.log(this.$store.getters.getShowLogin);
       // 点击登录按钮, 通过更改vuex的showLogin值显示登录组件
