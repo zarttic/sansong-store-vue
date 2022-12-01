@@ -116,11 +116,13 @@ export default {
           }
         })
         this.notifyError("请刷新页面");
-
+        window.location.reload()
+      }else {
+        console.log(orderId)
+        console.log(this.total[index])
+        window.open('http://localhost:9001/alipay/pay?&subject=三松商城订单'+"&traceNo="+orderId+"&totalAmount="+this.total[index].totalPrice)
       }
-      console.log(orderId)
-      console.log(this.total[index])
-      window.open('http://localhost:9001/alipay/pay?&subject=三松商城订单'+"&traceNo="+orderId+"&totalAmount="+this.total[index].totalPrice)
+
     }
   },
   data() {
@@ -147,9 +149,18 @@ export default {
           this.orders = tem.reverse()
           for (let i = 0; i < this.orders.length; i++) {
             console.log("调试信息")
-            console.log(this.orders[i][0].orders.delay)
+            console.log(this.orders[i][0].orders)
+            //检测到过期订单 自动发请求 变为失效订单
+            if (this.orders[i][0].orders.delay < Date.now() && this.orders[i][0].orders.state === 0){
+              this.request.get('/ordersController/setExpired',{
+                params:{
+                  orderId:this.orders[i][0].orders.orderId
+                }
+              })
+            }
             if (this.orders[i][0].orders.delay !== 0) {
-              this.times[i] = this.orders[i][0].orders.delay * 1000 + Date.now();
+              // this.times[i] = this.orders[i][0].orders.delay * 1000 + Date.now();
+              this.times[i] = this.orders[i][0].orders.delay;
             }
           }
           console.log(this.times)
