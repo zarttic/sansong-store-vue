@@ -21,9 +21,10 @@ export default {
   created() {
     // 从后端请求README.md
     this.request
-      .get("https://gitee.com/zarttic/sansong-store-vue/blob/master/README.md", {})
+      .get("/public/project.md", {})
       .then(res => {
         this.md = res.data;
+        console.log(this.md)
       })
       .catch(err => {
         return Promise.reject(err);

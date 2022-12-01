@@ -143,7 +143,8 @@ export default {
         console.log("订单信息")
         console.log(res.data)
         if (res.code === 200) {
-          this.orders = res.data;
+          let tem = res.data;
+          this.orders = tem.reverse()
           for (let i = 0; i < this.orders.length; i++) {
             console.log("调试信息")
             console.log(this.orders[i][0].orders.delay)
